@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Windows.Forms;
-using Arhive_MDM.Data.Repositories;
-using Arhive_MDM;
+using BarbershopMDM.Data.Repositories;
 
-namespace Arhive_MDM.Forms
+namespace BarbershopMDM.Forms
 {
     public partial class LoginForm : Form
     {
-        private readonly IWorkerRepository _workersRepo;
+        private readonly IEmployeesRepository _employeesRepo;
 
         public LoginForm()
         {
-            _workersRepo = (IWorkerRepository)Program.ServiceProvider.GetService(typeof(IWorkerRepository));
+            _employeesRepo = (IEmployeesRepository)Program.ServiceProvider.GetService(typeof(IEmployeesRepository));
             InitializeComponent();
         }
 
@@ -32,7 +31,7 @@ namespace Arhive_MDM.Forms
                 return;
             }
 
-            var user = await _workersRepo.GetWorker(login);
+            var user = await _employeesRepo.GetEmployee(login);
             if (user == null || user.Password != password)
             {
                 MessageBox.Show("Неверный логин или пароль.");
@@ -48,10 +47,6 @@ namespace Arhive_MDM.Forms
                 case "manager":
                     Hide();
                     new ManagerForm().ShowDialog();
-                    break;
-                case "archivatius":
-                    Hide();
-
                     break;
                 default:
                     MessageBox.Show("Ошибка 1: Неопознанная роль пользователя.");

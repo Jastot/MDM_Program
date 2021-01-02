@@ -29,7 +29,7 @@ namespace Arhive_MDM.Data.Repositories
             _context.Workers.FirstOrDefaultAsync(x => x.Login == login);
         
 
-        public Task<List<Worker>> GetWorker()=>
+        public Task<List<Worker>> GetWorkers()=>
             _context.Workers.ToListAsync();
 
         public Task RemoveWorker(Worker worker)

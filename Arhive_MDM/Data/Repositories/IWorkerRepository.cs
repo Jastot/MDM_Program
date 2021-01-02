@@ -18,7 +18,7 @@ namespace Arhive_MDM.Data.Repositories
 
         /// <summary>Gets all workers.</summary>
         /// <returns>Returns all workers.</returns>
-        Task<List<Worker>> GetWorker();
+        Task<List<Worker>> GetWorkers();
 
         /// <summary>Creates worker.</summary>
         /// <param name="worker">worker data.</param>

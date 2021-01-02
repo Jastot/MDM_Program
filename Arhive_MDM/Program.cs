@@ -4,12 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Arhive_MDM.Data;
 using Arhive_MDM.Data.Repositories;
+using Arhive_MDM.Forms;
 
-namespace BarbershopMDM
+namespace Arhive_MDM
 {
     static class Program
     {
         public static IServiceProvider ServiceProvider { get; set; }
+
+        public static Form LoginForm { get; set; }
 
         [STAThread]
         static void Main()
@@ -24,7 +27,8 @@ namespace BarbershopMDM
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(/*new SmthForm()*/);
+            LoginForm = new LoginForm();
+            Application.Run(LoginForm);
         }
 
         static void ConfigureServices()

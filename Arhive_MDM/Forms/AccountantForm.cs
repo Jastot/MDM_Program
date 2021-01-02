@@ -1,29 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BarbershopMDM.Data.Repositories;
+using Arhive_MDM.Data.Repositories;
 
-namespace BarbershopMDM.Forms
+namespace Arhive_MDM.Forms
 {
     public partial class AccountantForm : Form
     {
         private readonly int _currentUserId;
-        private readonly IConsumablesRepository _consumablesRepository;
-        private readonly ISuppliersRepository _suppliersRepository;
-        private readonly IOrdersRepository _ordersRepository;
+        private readonly ICaseRepository _caseRepository;
+        private readonly IDocumentsRepository _documentsRepository;
+        //private readonly IOrdersRepository _ordersRepository;
 
         public AccountantForm(int userId)
         {
             _currentUserId = userId;
-            _consumablesRepository = (IConsumablesRepository)Program.ServiceProvider.GetService(typeof(IConsumablesRepository));
-            _suppliersRepository = (ISuppliersRepository)Program.ServiceProvider.GetService(typeof(ISuppliersRepository));
-            _ordersRepository = (IOrdersRepository)Program.ServiceProvider.GetService(typeof(IOrdersRepository));
+            _caseRepository = (ICaseRepository)Program.ServiceProvider.GetService(typeof(ICaseRepository));
+            _documentsRepository = (IDocumentsRepository)Program.ServiceProvider.GetService(typeof(IDocumentsRepository));
+            //_ordersRepository = (IOrdersRepository)Program.ServiceProvider.GetService(typeof(IOrdersRepository));
 
             InitializeComponent();
 
@@ -235,5 +230,7 @@ namespace BarbershopMDM.Forms
         {
             Program.LoginForm.Show();
         }
+
+       
     }
 }

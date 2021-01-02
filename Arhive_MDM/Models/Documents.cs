@@ -14,9 +14,11 @@ namespace Arhive_MDM.Models
 
         public Case Case { get; set; }
 
-        public DateTime TimeCreated { get; set; }
+        public string FileName { get; set; }
 
-        public DateTime TimeCompleted { get; set; }
+        public byte[] File { get; set; }
+
+        public DateTime TimeCreated { get; set; }
 
     }
 }

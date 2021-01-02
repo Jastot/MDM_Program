@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BarbershopMDM.Data.Repositories;
+using Arhive_MDM.Data.Repositories;
 
-namespace BarbershopMDM.Forms
+namespace Arhive_MDM.Forms
 {
     public partial class AdminForm : Form
     {
-        private readonly IEmployeesRepository _employeesRepository;
-        private readonly IOrdersRepository _ordersRepository;
+        private readonly IWorkerRepository _workersRepository;
+        private readonly ICaseRepository _casesRepository;
         private int _selectedUserId;
 
         public AdminForm()
         {
-            _employeesRepository = (IEmployeesRepository)Program.ServiceProvider.GetService(typeof(IEmployeesRepository));
-            _ordersRepository = (IOrdersRepository)Program.ServiceProvider.GetService(typeof(IOrdersRepository));
+            _workersRepository = (IWorkerRepository)Program.ServiceProvider.GetService(typeof(IWorkerRepository));
+            _casesRepository = (ICaseRepository)Program.ServiceProvider.GetService(typeof(ICaseRepository));
 
             InitializeComponent();
 
@@ -28,19 +28,24 @@ namespace BarbershopMDM.Forms
             dataGridViewUsers.Columns[3].Visible = false;
             dataGridViewUsers.Columns[4].Visible = false;
             
-            comboBoxRole.Items.AddRange(new string[] { "Бухгалтер", "Администратор" });
+            comboBoxRole.Items.AddRange(new string[] { "Бухгалтер",
+                "Менеджер","Архивариус","Администратор"});
             comboBoxRole.SelectedIndex = 0;
         }
 
         private async Task UpdateDataGridView()
         {
-            var users = await _employeesRepository.GetEmployees();
+            var users = await _workersRepository.GetWorkers();
             dataGridViewUsers.Rows.Clear();
             dataGridViewUsers.Columns[0].Width = users.Count > 3 ? 313 : 330;
             foreach (var user in users)
             {
-                var role = user.Role.Equals("accountant") ? "Бухгалтер" : user.Role.Equals("manager") ? "Администратор" : "Неизвестно";
-                dataGridViewUsers.Rows.Add(new[] { user.Name, user.Login, role, user.Id.ToString(), user.Password });
+                var role = user.Role.Equals("accountant") ? "Бухгалтер" 
+                    : user.Role.Equals("manager") ? "Менеджер" 
+                    : user.Role.Equals("archivarius") ? "Архивариус"
+                    : user.Role.Equals("admin") ? "Администратор"
+                    : "Неизвестно";
+                dataGridViewUsers.Rows.Add(new[] { user.FIO, user.Login, role, user.Id.ToString(), user.Password });
             }
             ClearDataGridViewSelection();
         }
@@ -82,40 +87,43 @@ namespace BarbershopMDM.Forms
 
         private async void ButtonAdd_Click(object sender, EventArgs e)
         {
-            if (!VerifyTextBoxes(out var name, out var login, out var password))
+            if (!VerifyTextBoxes(out var fio, out var login, out var password))
             {
                 return;
             }
 
-            var user = new Models.Employee()
+            var user = new Models.Worker()
             {
-                Name = name,
+                FIO = fio,
                 Login = login,
                 Password = password,
-                Role = comboBoxRole.SelectedIndex == 0 ? "accountant" : "manager"
+                Role = comboBoxRole.SelectedIndex == 0 ? "accountant" : 
+                comboBoxRole.SelectedIndex == 1 ? "manager" : 
+                comboBoxRole.SelectedIndex == 2 ? "archivarius" : 
+                 "admin"
             };
 
-            if (await _employeesRepository.GetEmployee(login) != null)
+            if (await _workersRepository.GetWorker(login) != null)
             {
                 MessageBox.Show("Пользователь с таким логином уже существует.");
                 return;
             }
 
-            await _employeesRepository.CreateEmployee(user);
+            await _workersRepository.CreateWorker(user);
             await UpdateDataGridView();
         }
 
         private async void ButtonEdit_Click(object sender, EventArgs e)
         {
-            if (!VerifyTextBoxes(out var name, out var login, out var password))
+            if (!VerifyTextBoxes(out var fio, out var login, out var password))
             {
                 return;
             }
 
-            var user = await _employeesRepository.GetEmployee(_selectedUserId);
+            var user = await _workersRepository.GetWorker(_selectedUserId);
             if (!user.Login.Equals(login))
             {
-                var userByLogin = await _employeesRepository.GetEmployee(login);
+                var userByLogin = await _workersRepository.GetWorker(login);
                 if (userByLogin != null)
                 {
                     MessageBox.Show("Пользователь с таким логином уже существует.");
@@ -123,24 +131,27 @@ namespace BarbershopMDM.Forms
                 }
                 user.Login = login;
             }
-            user.Name = name;
+            user.FIO = fio;
             user.Password = password;
-            user.Role = comboBoxRole.SelectedIndex == 0 ? "accountant" : "manager";
+            user.Role = comboBoxRole.SelectedIndex == 0 ? "accountant" :
+                comboBoxRole.SelectedIndex == 1 ? "manager" :
+                comboBoxRole.SelectedIndex == 2 ? "archivarius" :
+                 "admin";
 
-            await _employeesRepository.UpdateEmployee(user);
+            await _workersRepository.UpdateWorker(user);
             await UpdateDataGridView();
         }
 
         private async void ButtonRemove_Click(object sender, EventArgs e)
         {
-            var userOrders = await _ordersRepository.GetEmployeeOrders(_selectedUserId);
+            var userOrders = await _casesRepository.GetWorkerCases(_selectedUserId);
             if (userOrders.Count > 0)
             {
                 MessageBox.Show("Нельзя удалить пользователя, за которым закреплены заказы.");
                 return;
             }
-            var user = await _employeesRepository.GetEmployee(_selectedUserId);
-            await _employeesRepository.RemoveEmployee(user);
+            var user = await _workersRepository.GetWorker(_selectedUserId);
+            await _workersRepository.RemoveWorker(user);
             await UpdateDataGridView();
         }
 
@@ -163,6 +174,7 @@ namespace BarbershopMDM.Forms
 
             if (userIsSelected)
             {
+                // нужно еще глянуть 181
                 var selectedRow = selectedRows[0];
                 textBoxName.Text = selectedRow.Cells[0].Value.ToString();
                 textBoxLogin.Text = selectedRow.Cells[1].Value.ToString();

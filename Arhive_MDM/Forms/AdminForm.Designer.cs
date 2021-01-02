@@ -1,5 +1,5 @@
 ﻿
-namespace BarbershopMDM.Forms
+namespace Arhive_MDM.Forms
 {
     partial class AdminForm
     {

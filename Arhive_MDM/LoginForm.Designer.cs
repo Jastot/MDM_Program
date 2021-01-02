@@ -1,5 +1,5 @@
 ﻿
-namespace Arhive_MDM.Forms
+namespace BarbershopMDM.Forms
 {
     partial class LoginForm
     {

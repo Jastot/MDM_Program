@@ -14,11 +14,13 @@ namespace Arhive_MDM.Data.Repositories
         /// <summary>Get order's content.</summary>
         /// <param name="orderId">Id of the order.</param>
         /// <returns>Returns order's content.</returns>
-        Task<List<OrderContent>> GetOrdersContent(int orderId);
-
+        Task<List<OrderContent>> GetListOrdersContent(int orderId);
+        Task<OrderContent> GetOrdersContent(int orderContentId);
         /// <summary>Gets all orders.</summary>
         /// <returns>Returns all orders.</returns>
         Task<List<Orders>> GetOrders();
+
+        Task<List<Orders>> GetClientsOrders(int clientId);
 
         /// <summary>Get all employee orders.</summary>
         /// <param name="workerId">Id of the employee orders.</param>
@@ -33,15 +35,17 @@ namespace Arhive_MDM.Data.Repositories
 
         /// <summary>Creates order content.</summary>
         /// <param name="orderContent">Order content to create.</param>
-        Task CreateOrderContent(List<OrderContent> orderContent);
+        Task CreateListOrderContent(List<OrderContent> orderContent);
+        Task CreateOrderContent(OrderContent orderContent);
 
         /// <summary>Updates order.</summary>
         /// <param name="order">Order data.</param>
         Task UpdateOrder(Orders order);
 
+        Task UpdateOrderContentList(List<OrderContent> orderContent);
         /// <summary>Updates order content.</summary>
         /// <param name="orderContent">Order content to update.</param>
-        Task UpdateOrderContent(List<OrderContent> orderContent);
+        Task UpdateOrderContent(OrderContent orderContent);
 
         /// <summary>Removes order and it's content.</summary>
         /// <param name="order">Order data.</param>

@@ -107,7 +107,7 @@ namespace Arhive_MDM.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "LoginForm";
-            this.Text = "ИС Парикмахерская";
+            this.Text = "ИС Архив";
             this.VisibleChanged += new System.EventHandler(this.LoginForm_VisibleChanged);
             this.ResumeLayout(false);
             this.PerformLayout();

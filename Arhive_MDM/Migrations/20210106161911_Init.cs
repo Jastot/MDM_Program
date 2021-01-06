@@ -97,6 +97,7 @@ namespace Arhive_MDM.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     OrdersId = table.Column<int>(nullable: false),
+                    Info = table.Column<string>(nullable: true),
                     FileId = table.Column<int>(nullable: false),
                     File = table.Column<byte[]>(nullable: true)
                 },
@@ -118,8 +119,9 @@ namespace Arhive_MDM.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     CaseId = table.Column<int>(nullable: false),
-                    TimeCreated = table.Column<DateTime>(nullable: false),
-                    TimeCompleted = table.Column<DateTime>(nullable: false)
+                    FileName = table.Column<string>(nullable: true),
+                    File = table.Column<byte[]>(nullable: true),
+                    TimeCreated = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

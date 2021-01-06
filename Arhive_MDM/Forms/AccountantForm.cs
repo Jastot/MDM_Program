@@ -46,26 +46,26 @@ namespace Arhive_MDM.Forms
 
         private async Task UpdateDataGridViewConsumables()
         {
-            var consumables = await _consumablesRepository.GetConsumables();
-            dataGridViewConsumables.Rows.Clear();
-            dataGridViewConsumables.Columns[1].Width = consumables.Count > 4 ? 348 : 365;
-            foreach (var consumable in consumables)
-            {
-                dataGridViewConsumables.Rows.Add(new[] { consumable.Id.ToString(), consumable.Name, consumable.CurrentAmount.ToString() });
-            }
-            ClearDataGridViewConsumablesSelection();
+            //var consumables = await _consumablesRepository.GetConsumables();
+            //dataGridViewConsumables.Rows.Clear();
+            //dataGridViewConsumables.Columns[1].Width = consumables.Count > 4 ? 348 : 365;
+            //foreach (var consumable in consumables)
+            //{
+            //    dataGridViewConsumables.Rows.Add(new[] { consumable.Id.ToString(), consumable.Name, consumable.CurrentAmount.ToString() });
+            //}
+            //ClearDataGridViewConsumablesSelection();
         }
 
         private async Task UpdateDataGridViewSuppliers()
         {
-            var suppliers = await _suppliersRepository.GetSuppliers();
-            dataGridViewSuppliers.Rows.Clear();
-            //dataGridViewSuppliers.Columns[1].Width = suppliers.Count > 4 ? 348 : 365;
-            foreach (var supplier in suppliers)
-            {
-                dataGridViewSuppliers.Rows.Add(new[] { supplier.Name, supplier.OGRN.ToString(), supplier.ContactNumber });
-            }
-            ClearDataGridViewSuppliersSelection();
+            //var suppliers = await _suppliersRepository.GetSuppliers();
+            //dataGridViewSuppliers.Rows.Clear();
+            ////dataGridViewSuppliers.Columns[1].Width = suppliers.Count > 4 ? 348 : 365;
+            //foreach (var supplier in suppliers)
+            //{
+            //    dataGridViewSuppliers.Rows.Add(new[] { supplier.Name, supplier.OGRN.ToString(), supplier.ContactNumber });
+            //}
+            //ClearDataGridViewSuppliersSelection();
         }
 
         private void ClearDataGridViewConsumablesSelection()
@@ -131,48 +131,48 @@ namespace Arhive_MDM.Forms
 
         private async void ButtonAddConsumables_Click(object sender, EventArgs e)
         {
-            if (!VerifyConsumablesValues(out var name, out var amount))
-            {
-                return;
-            }
+            //if (!VerifyConsumablesValues(out var name, out var amount))
+            //{
+            //    return;
+            //}
 
-            var consumable = new Models.Consumables()
-            {
-                Name = name,
-                CurrentAmount = amount
-            };
+            //var consumable = new Models.Consumables()
+            //{
+            //    Name = name,
+            //    CurrentAmount = amount
+            //};
 
-            await _consumablesRepository.CreateConsumable(consumable);
-            await UpdateDataGridViewConsumables();
+            //await _consumablesRepository.CreateConsumable(consumable);
+            //await UpdateDataGridViewConsumables();
         }
 
         private async void ButtonEditConsumables_Click(object sender, EventArgs e)
         {
-            if (!VerifyConsumablesValues(out var name, out var amount))
-            {
-                return;
-            }
+            //if (!VerifyConsumablesValues(out var name, out var amount))
+            //{
+            //    return;
+            //}
 
-            var consumable = await _consumablesRepository.GetConsumable(Convert.ToInt32(textBoxConsumablesId.Text));
-            consumable.Name = name;
-            consumable.CurrentAmount = amount;
+            //var consumable = await _consumablesRepository.GetConsumable(Convert.ToInt32(textBoxConsumablesId.Text));
+            //consumable.Name = name;
+            //consumable.CurrentAmount = amount;
 
-            await _consumablesRepository.UpdateConsumable(consumable);
-            await UpdateDataGridViewConsumables();
+            //await _consumablesRepository.UpdateConsumable(consumable);
+            //await UpdateDataGridViewConsumables();
         }
 
         private async void ButtonRemoveConsumables_Click(object sender, EventArgs e)
         {
-            var consumablesId = Convert.ToInt32(textBoxConsumablesId.Text);
-            var ordersContents = await _ordersRepository.GetOrderContentsWithConsumables(consumablesId);
-            if (ordersContents.Count > 0)
-            {
-                MessageBox.Show("Нельзя удалить материалы, указанные в заказах.");
-                return;
-            }
-            var consumable = await _consumablesRepository.GetConsumable(consumablesId);
-            await _consumablesRepository.RemoveConsumable(consumable);
-            await UpdateDataGridViewConsumables();
+            //var consumablesId = Convert.ToInt32(textBoxConsumablesId.Text);
+            //var ordersContents = await _ordersRepository.GetOrderContentsWithConsumables(consumablesId);
+            //if (ordersContents.Count > 0)
+            //{
+            //    MessageBox.Show("Нельзя удалить материалы, указанные в заказах.");
+            //    return;
+            //}
+            //var consumable = await _consumablesRepository.GetConsumable(consumablesId);
+            //await _consumablesRepository.RemoveConsumable(consumable);
+            //await UpdateDataGridViewConsumables();
         }
 
         private void ButtonCancelConsumables_Click(object sender, EventArgs e)

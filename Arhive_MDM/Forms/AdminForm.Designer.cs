@@ -203,7 +203,7 @@ namespace Arhive_MDM.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AdminForm";
-            this.Text = "ИС Парикмахерская. Управление пользователями";
+            this.Text = "ИС Архив - Управление пользователями";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AdminForm_FormClosed);
             this.Shown += new System.EventHandler(this.AdminForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUsers)).EndInit();

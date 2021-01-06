@@ -84,7 +84,10 @@ namespace Arhive_MDM.Migrations
                     b.Property<int>("CaseId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("TimeCompleted")
+                    b.Property<byte[]>("File")
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("FileName")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("TimeCreated")
@@ -111,6 +114,9 @@ namespace Arhive_MDM.Migrations
 
                     b.Property<int>("FileId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Info")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("OrdersId")
                         .HasColumnType("INTEGER");

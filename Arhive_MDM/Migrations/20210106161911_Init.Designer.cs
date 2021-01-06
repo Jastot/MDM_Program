@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Arhive_MDM.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201230222723_Init")]
+    [Migration("20210106161911_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,7 +86,10 @@ namespace Arhive_MDM.Migrations
                     b.Property<int>("CaseId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("TimeCompleted")
+                    b.Property<byte[]>("File")
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("FileName")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("TimeCreated")
@@ -113,6 +116,9 @@ namespace Arhive_MDM.Migrations
 
                     b.Property<int>("FileId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Info")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("OrdersId")
                         .HasColumnType("INTEGER");

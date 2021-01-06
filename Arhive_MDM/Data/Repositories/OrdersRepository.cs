@@ -20,13 +20,15 @@ namespace Arhive_MDM.Data.Repositories
             _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
 
         /// <inheritdoc />
-        public Task<List<OrderContent>> GetOrdersContent(int orderId) =>
+        public Task<List<OrderContent>> GetListOrdersContent(int orderId) =>
             _context.OrderContents.Where(x => x.OrdersId == orderId).ToListAsync();
-
+        public Task<OrderContent> GetOrdersContent(int orderContentId) =>
+            _context.OrderContents.FirstOrDefaultAsync(x => x.Id == orderContentId);
         /// <inheritdoc />
         public Task<List<Orders>> GetOrders() =>
             _context.Orders.ToListAsync();
-
+        public Task<List<Orders>> GetClientsOrders(int clientId) =>
+            _context.Orders.Where(x => x.ClientId == clientId).ToListAsync();
         /// <inheritdoc />
         public Task<OrderContent> GetOrderContentWithFile(int fileId) =>
             _context.OrderContents.FirstOrDefaultAsync(x => x.FileId == fileId);
@@ -40,9 +42,14 @@ namespace Arhive_MDM.Data.Repositories
         }
 
         /// <inheritdoc />
-        public async Task CreateOrderContent(List<OrderContent> orderContent)
+        public async Task CreateListOrderContent(List<OrderContent> orderContent)
         {
             await _context.OrderContents.AddRangeAsync(orderContent);
+            await _context.SaveChangesAsync();
+        }
+        public async Task CreateOrderContent(OrderContent orderContent)
+        {
+            await _context.OrderContents.AddAsync(orderContent);
             await _context.SaveChangesAsync();
         }
 
@@ -54,9 +61,14 @@ namespace Arhive_MDM.Data.Repositories
         }
 
         /// <inheritdoc />
-        public Task UpdateOrderContent(List<OrderContent> orderContent)
+        public Task UpdateOrderContentList(List<OrderContent> orderContent)
         {
             _context.OrderContents.UpdateRange(orderContent);
+            return _context.SaveChangesAsync();
+        }
+        public Task UpdateOrderContent(OrderContent orderContent)
+        {
+            _context.OrderContents.Update(orderContent);
             return _context.SaveChangesAsync();
         }
 
@@ -81,5 +93,7 @@ namespace Arhive_MDM.Data.Repositories
             _context.OrderContents.RemoveRange(orderContent);
             return _context.SaveChangesAsync();
         }
+
+        
     }
 }

@@ -12,6 +12,8 @@ namespace Arhive_MDM.Models
 
         public Orders Orders { get; set; }
 
+        public string Info { get; set; }
+
         public int FileId { get; set; }
         public byte[] File { get; set; }
     }

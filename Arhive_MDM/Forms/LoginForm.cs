@@ -20,9 +20,9 @@ namespace Arhive_MDM.Forms
             var login = textBoxLogin.Text;
             var password = textBoxPassword.Text;
 
-            if (login == "administrator")
+            if (login == "admin")
             {
-                if (password == "adminaccesspassword")
+                if (password == "admin")
                 {
                     Hide();
                     new AdminForm().ShowDialog();
@@ -47,7 +47,7 @@ namespace Arhive_MDM.Forms
                     break;
                 case "manager":
                     Hide();
-                    new ManagerForm().ShowDialog();
+                    new ManagerForm(user.Id).ShowDialog();
                     break;
                 case "archivatius":
                     Hide();

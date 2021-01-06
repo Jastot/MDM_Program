@@ -216,7 +216,7 @@ namespace Arhive_MDM.Forms
             this.ClientSize = new System.Drawing.Size(959, 450);
             this.Controls.Add(this.panel1);
             this.Name = "MainAccounatantForm";
-            this.Text = "MainAccounatantForm";
+            this.Text = "ИС Архив - Бухгалтер";
             this.panel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOrders)).EndInit();

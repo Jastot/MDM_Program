@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Arhive_MDM.Models;
+using System;
 
 namespace Arhive_MDM.Data.Repositories
 {
@@ -30,6 +31,9 @@ namespace Arhive_MDM.Data.Repositories
         public Task<List<Orders>> GetClientsOrders(int clientId) =>
             _context.Orders.Where(x => x.ClientId == clientId).ToListAsync();
         /// <inheritdoc />
+        /// 
+        public Task<List<Orders>> GetOrdersWithWorker(int workerId) =>
+            _context.Orders.Where(x => x.WorkerId == workerId).ToListAsync();
         public Task<OrderContent> GetOrderContentWithFile(int fileId) =>
             _context.OrderContents.FirstOrDefaultAsync(x => x.FileId == fileId);
 
@@ -75,12 +79,8 @@ namespace Arhive_MDM.Data.Repositories
         /// <inheritdoc />
         public async Task RemoveOrder(Orders order)
         {
-            // как тут тогда надо. haihai выходит сносить бд ? и
-            // не, репозитории просто sql запросы.
-            // sql create это только dataContext
-            // репозитории просто выдают инфу или обновляют её
-            //короче отражения не будет на самой бд. окей.
-            // да, только на самих данных, так что всё ок.
+            // haihai
+            
             var orderContent = await _context.OrderContents.Where(x => x.OrdersId == order.Id).ToListAsync();
             _context.OrderContents.RemoveRange(orderContent);
             _context.Orders.Remove(order);
@@ -94,6 +94,10 @@ namespace Arhive_MDM.Data.Repositories
             return _context.SaveChangesAsync();
         }
 
-        
+        public Task<List<Orders>> GetWorkerOrders(int workerId) =>
+            _context.Orders.Where(x => x.WorkerId == workerId).ToListAsync();
+
+        public Task<List<Orders>> GetOrdersinDates(DateTime datastart, DateTime dataend) =>
+            _context.Orders.Where(x => x.TimeCreated >= datastart && x.TimeCreated <= dataend).ToListAsync();
     }
 }

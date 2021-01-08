@@ -15,6 +15,6 @@ namespace Arhive_MDM.Models
         public string Info { get; set; }
 
         public int FileId { get; set; }
-        public byte[] File { get; set; }
+        public string FileLink { get; set; }
     }
 }

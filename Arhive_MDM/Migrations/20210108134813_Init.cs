@@ -46,6 +46,7 @@ namespace Arhive_MDM.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ClientId = table.Column<int>(nullable: false),
+                    WorkerId = table.Column<int>(nullable: false),
                     Payment = table.Column<int>(nullable: false),
                     PaymentIsDone = table.Column<int>(nullable: false),
                     TimeCreated = table.Column<DateTime>(nullable: false),
@@ -60,34 +61,35 @@ namespace Arhive_MDM.Migrations
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cases",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    WorkerId = table.Column<int>(nullable: false),
-                    ClientId = table.Column<int>(nullable: false),
-                    TimeCreated = table.Column<DateTime>(nullable: false),
-                    TimeCompleted = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cases", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cases_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cases_Workers_WorkerId",
+                        name: "FK_Orders_Workers_WorkerId",
                         column: x => x.WorkerId,
                         principalTable: "Workers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Documents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderId = table.Column<int>(nullable: false),
+                    OrdersId = table.Column<int>(nullable: true),
+                    FileName = table.Column<string>(nullable: true),
+                    FileLink = table.Column<string>(nullable: true),
+                    TimeCreated = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Documents_Orders_OrdersId",
+                        column: x => x.OrdersId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,7 +101,7 @@ namespace Arhive_MDM.Migrations
                     OrdersId = table.Column<int>(nullable: false),
                     Info = table.Column<string>(nullable: true),
                     FileId = table.Column<int>(nullable: false),
-                    File = table.Column<byte[]>(nullable: true)
+                    FileLink = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -111,44 +113,6 @@ namespace Arhive_MDM.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "Documents",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CaseId = table.Column<int>(nullable: false),
-                    FileName = table.Column<string>(nullable: true),
-                    File = table.Column<byte[]>(nullable: true),
-                    TimeCreated = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Documents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Documents_Cases_CaseId",
-                        column: x => x.CaseId,
-                        principalTable: "Cases",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cases_ClientId",
-                table: "Cases",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cases_Id",
-                table: "Cases",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cases_WorkerId",
-                table: "Cases",
-                column: "WorkerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_ContactNumber",
@@ -163,15 +127,15 @@ namespace Arhive_MDM.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Documents_CaseId",
-                table: "Documents",
-                column: "CaseId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Documents_Id",
                 table: "Documents",
                 column: "Id",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Documents_OrdersId",
+                table: "Documents",
+                column: "OrdersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderContents_Id",
@@ -196,6 +160,11 @@ namespace Arhive_MDM.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_WorkerId",
+                table: "Orders",
+                column: "WorkerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Workers_Id",
                 table: "Workers",
                 column: "Id",
@@ -217,16 +186,13 @@ namespace Arhive_MDM.Migrations
                 name: "OrderContents");
 
             migrationBuilder.DropTable(
-                name: "Cases");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Workers");
+                name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "Workers");
         }
     }
 }

@@ -51,6 +51,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.6.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.2, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.2\lib\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.1\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -174,27 +180,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataContext.cs" />
-    <Compile Include="Data\Repositories\CaseRepository.cs" />
     <Compile Include="Data\Repositories\ClientsRepository.cs" />
     <Compile Include="Data\Repositories\DocumentsRepository.cs" />
-    <Compile Include="Data\Repositories\ICaseRepository.cs" />
+    <Compile Include="Data\Repositories\FileManager.cs" />
     <Compile Include="Data\Repositories\IClientsRepository.cs" />
     <Compile Include="Data\Repositories\IDocumentsRepository.cs" />
+    <Compile Include="Data\Repositories\IFileManager.cs" />
     <Compile Include="Data\Repositories\IOrdersRepository.cs" />
     <Compile Include="Data\Repositories\IWorkerRepository.cs" />
     <Compile Include="Data\Repositories\OrdersRepository.cs" />
     <Compile Include="Data\Repositories\WorkerRepository.cs" />
-    <Compile Include="Forms\AccountantForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AccountantForm.Designer.cs">
-      <DependentUpon>AccountantForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\AdminForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\AdminForm.Designer.cs">
       <DependentUpon>AdminForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ArchivariusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ArchivariusForm.Designer.cs">
+      <DependentUpon>ArchivariusForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\LoginForm.cs">
       <SubType>Form</SubType>
@@ -214,12 +220,11 @@
     <Compile Include="Forms\ManagerForm.Designer.cs">
       <DependentUpon>ManagerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20210106161911_Init.cs" />
-    <Compile Include="Migrations\20210106161911_Init.designer.cs">
-      <DependentUpon>20210106161911_Init.cs</DependentUpon>
+    <Compile Include="Migrations\20210108134813_Init.cs" />
+    <Compile Include="Migrations\20210108134813_Init.designer.cs">
+      <DependentUpon>20210108134813_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\DataContextModelSnapshot.cs" />
-    <Compile Include="Models\Case.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Documents.cs" />
     <Compile Include="Models\OrderContent.cs" />
@@ -227,11 +232,11 @@
     <Compile Include="Models\Worker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\AccountantForm.resx">
-      <DependentUpon>AccountantForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ArchivariusForm.resx">
+      <DependentUpon>ArchivariusForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -275,6 +280,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

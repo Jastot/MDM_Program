@@ -12,9 +12,12 @@ namespace Arhive_MDM.Forms
         private readonly int _currentUserId;
         private readonly IClientsRepository _clientsRepository;
         private readonly IOrdersRepository _ordersRepository;
+        private readonly IWorkerRepository _workerRepository;
         private DataGridViewSelectedRowCollection selectedOrdersRow;
         private DataGridViewSelectedRowCollection selectedClientsRow;
         private bool orderSelected;
+        private int buff = 10000;
+        private int _chosenWorkerId;
 
         //Дописать выключение кнопок при условиях
         public ManagerForm(int userId)
@@ -22,7 +25,8 @@ namespace Arhive_MDM.Forms
             _currentUserId = userId;
             _clientsRepository = (IClientsRepository)Program.ServiceProvider.GetService(typeof(IClientsRepository));
             _ordersRepository = (IOrdersRepository)Program.ServiceProvider.GetService(typeof(IOrdersRepository));
-           
+            _workerRepository = (IWorkerRepository)Program.ServiceProvider.GetService(typeof(IWorkerRepository));
+
             InitializeComponent();
 
             dataGridViewClients.RowHeadersVisible = false;
@@ -88,8 +92,8 @@ namespace Arhive_MDM.Forms
                 {
                 textBoxIdClient.Text = selectedRow.Cells[0].Value.ToString();
                 textBoxFIO.Text = selectedRow.Cells[1].Value.ToString();
-                textBoxAddress.Text = selectedRow.Cells[2].Value.ToString();
-                textBoxTelephone.Text = selectedRow.Cells[3].Value.ToString();
+                textBoxTelephone.Text = selectedRow.Cells[2].Value.ToString();
+                textBoxAddress.Text = selectedRow.Cells[3].Value.ToString();
                 UpdateDataGridViewOrders(Convert.ToInt32(textBoxIdClient.Text));
                     if(orderSelected)
                     UpdateDataGridViewOrderContents(Convert.ToInt32(textBoxOrderId.Text));
@@ -331,6 +335,10 @@ namespace Arhive_MDM.Forms
 
         private async void buttonAddOrder_Click(object sender, System.EventArgs e)
         {
+            if (!VerifyClintsValues(out var fio, out var telephone, out var address))
+            {
+                return;
+            }
             if (!VerifyOrdersValues(out var summ, out var payment))
             {
                 return;
@@ -338,12 +346,33 @@ namespace Arhive_MDM.Forms
 
             var selectedClientRow = selectedClientsRow[0];
 
+            var workers = await _workerRepository.GetWorkersWhoRole("archivarius");
+            
+            foreach (var worker in workers)
+            {
+                if (worker.Orders != null)
+                {
+                    if (worker.Orders.Count < buff)
+                    {
+                        buff = worker.Orders.Count;
+                        _chosenWorkerId = worker.Id;
+                    }
+                }
+                else
+                {
+                    buff = 0;
+                    _chosenWorkerId = worker.Id;
+                }    
+                    
+            }
+
             var order = new Models.Orders()
             {
                 ClientId = Convert.ToInt32(selectedClientRow.Cells[0].Value),
                 Payment = Convert.ToInt32(summ),
                 PaymentIsDone = Convert.ToInt32(payment),
-                TimeCreated = DateTime.Now
+                TimeCreated = DateTime.Now,
+                WorkerId = _chosenWorkerId
             };
 
             await _ordersRepository.CreateOrder(order);

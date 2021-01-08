@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Arhive_MDM.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210106161911_Init")]
+    [Migration("20210108134813_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,36 +17,6 @@ namespace Arhive_MDM.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.10");
-
-            modelBuilder.Entity("Arhive_MDM.Models.Case", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("TimeCompleted")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("TimeCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("WorkerId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("WorkerId");
-
-                    b.ToTable("Cases");
-                });
 
             modelBuilder.Entity("Arhive_MDM.Models.Client", b =>
                 {
@@ -83,24 +53,27 @@ namespace Arhive_MDM.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CaseId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte[]>("File")
-                        .HasColumnType("BLOB");
+                    b.Property<string>("FileLink")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FileName")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("OrdersId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("TimeCreated")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CaseId");
-
                     b.HasIndex("Id")
                         .IsUnique();
+
+                    b.HasIndex("OrdersId");
 
                     b.ToTable("Documents");
                 });
@@ -111,11 +84,11 @@ namespace Arhive_MDM.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("File")
-                        .HasColumnType("BLOB");
-
                     b.Property<int>("FileId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("FileLink")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Info")
                         .HasColumnType("TEXT");
@@ -154,12 +127,17 @@ namespace Arhive_MDM.Migrations
                     b.Property<DateTime>("TimeCreated")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("WorkerId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
                     b.HasIndex("Id")
                         .IsUnique();
+
+                    b.HasIndex("WorkerId");
 
                     b.ToTable("Orders");
                 });
@@ -200,28 +178,11 @@ namespace Arhive_MDM.Migrations
                     b.ToTable("Workers");
                 });
 
-            modelBuilder.Entity("Arhive_MDM.Models.Case", b =>
-                {
-                    b.HasOne("Arhive_MDM.Models.Client", "Client")
-                        .WithMany("Cases")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Arhive_MDM.Models.Worker", "Worker")
-                        .WithMany("Cases")
-                        .HasForeignKey("WorkerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Arhive_MDM.Models.Documents", b =>
                 {
-                    b.HasOne("Arhive_MDM.Models.Case", "Case")
+                    b.HasOne("Arhive_MDM.Models.Orders", "Orders")
                         .WithMany("Documents")
-                        .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrdersId");
                 });
 
             modelBuilder.Entity("Arhive_MDM.Models.OrderContent", b =>
@@ -238,6 +199,12 @@ namespace Arhive_MDM.Migrations
                     b.HasOne("Arhive_MDM.Models.Client", "Client")
                         .WithMany("Orders")
                         .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Arhive_MDM.Models.Worker", "Worker")
+                        .WithMany("Orders")
+                        .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

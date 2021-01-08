@@ -43,6 +43,8 @@ namespace Arhive_MDM.Forms
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBoxSalary = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUsers)).BeginInit();
             this.groupBoxUserValues.SuspendLayout();
             this.SuspendLayout();
@@ -80,7 +82,7 @@ namespace Arhive_MDM.Forms
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(6, 124);
+            this.buttonAdd.Location = new System.Drawing.Point(6, 166);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(114, 23);
             this.buttonAdd.TabIndex = 3;
@@ -90,6 +92,8 @@ namespace Arhive_MDM.Forms
             // 
             // groupBoxUserValues
             // 
+            this.groupBoxUserValues.Controls.Add(this.textBoxSalary);
+            this.groupBoxUserValues.Controls.Add(this.label5);
             this.groupBoxUserValues.Controls.Add(this.buttonRemove);
             this.groupBoxUserValues.Controls.Add(this.buttonEdit);
             this.groupBoxUserValues.Controls.Add(this.buttonCancel);
@@ -104,13 +108,13 @@ namespace Arhive_MDM.Forms
             this.groupBoxUserValues.Controls.Add(this.textBoxLogin);
             this.groupBoxUserValues.Location = new System.Drawing.Point(12, 107);
             this.groupBoxUserValues.Name = "groupBoxUserValues";
-            this.groupBoxUserValues.Size = new System.Drawing.Size(534, 153);
+            this.groupBoxUserValues.Size = new System.Drawing.Size(534, 195);
             this.groupBoxUserValues.TabIndex = 4;
             this.groupBoxUserValues.TabStop = false;
             // 
             // buttonRemove
             // 
-            this.buttonRemove.Location = new System.Drawing.Point(246, 124);
+            this.buttonRemove.Location = new System.Drawing.Point(246, 166);
             this.buttonRemove.Name = "buttonRemove";
             this.buttonRemove.Size = new System.Drawing.Size(114, 23);
             this.buttonRemove.TabIndex = 10;
@@ -120,7 +124,7 @@ namespace Arhive_MDM.Forms
             // 
             // buttonEdit
             // 
-            this.buttonEdit.Location = new System.Drawing.Point(126, 124);
+            this.buttonEdit.Location = new System.Drawing.Point(126, 166);
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(114, 23);
             this.buttonEdit.TabIndex = 9;
@@ -130,7 +134,7 @@ namespace Arhive_MDM.Forms
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(414, 124);
+            this.buttonCancel.Location = new System.Drawing.Point(414, 166);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(114, 23);
             this.buttonCancel.TabIndex = 8;
@@ -150,18 +154,20 @@ namespace Arhive_MDM.Forms
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label4.Location = new System.Drawing.Point(6, 100);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(65, 13);
+            this.label4.Size = new System.Drawing.Size(73, 15);
             this.label4.TabIndex = 6;
             this.label4.Text = "Должность";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label3.Location = new System.Drawing.Point(6, 74);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(45, 13);
+            this.label3.Size = new System.Drawing.Size(51, 15);
             this.label3.TabIndex = 5;
             this.label3.Text = "Пароль";
             // 
@@ -177,26 +183,45 @@ namespace Arhive_MDM.Forms
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.Location = new System.Drawing.Point(6, 48);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 13);
+            this.label2.Size = new System.Drawing.Size(41, 15);
             this.label2.TabIndex = 3;
             this.label2.Text = "Логин";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.Location = new System.Drawing.Point(6, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 13);
+            this.label1.Size = new System.Drawing.Size(36, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "ФИО";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(6, 125);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(64, 15);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Зарплата";
+            // 
+            // textBoxSalary
+            // 
+            this.textBoxSalary.Location = new System.Drawing.Point(77, 124);
+            this.textBoxSalary.Name = "textBoxSalary";
+            this.textBoxSalary.Size = new System.Drawing.Size(451, 20);
+            this.textBoxSalary.TabIndex = 12;
             // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(559, 272);
+            this.ClientSize = new System.Drawing.Size(559, 314);
             this.Controls.Add(this.groupBoxUserValues);
             this.Controls.Add(this.dataGridViewUsers);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -229,5 +254,7 @@ namespace Arhive_MDM.Forms
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonRemove;
         private System.Windows.Forms.Button buttonEdit;
+        private System.Windows.Forms.TextBox textBoxSalary;
+        private System.Windows.Forms.Label label5;
     }
 }

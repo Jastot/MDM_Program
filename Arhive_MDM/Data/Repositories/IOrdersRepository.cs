@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Arhive_MDM.Models;
 
@@ -19,13 +20,16 @@ namespace Arhive_MDM.Data.Repositories
         /// <summary>Gets all orders.</summary>
         /// <returns>Returns all orders.</returns>
         Task<List<Orders>> GetOrders();
+        Task<List<Orders>> GetOrdersWithWorker(int workerId);
+        Task<List<Orders>> GetOrdersinDates(DateTime datastart, DateTime dataend);
 
         Task<List<Orders>> GetClientsOrders(int clientId);
 
-        /// <summary>Get all employee orders.</summary>
-        /// <param name="workerId">Id of the employee orders.</param>
-        /// <returns>Returns all employee's orders.</returns>
-    
+        /// <summary>Get all worker Case.</summary>
+        /// <param name="workerId">Id of the worker Cases.</param>
+        /// <returns>Returns all worker's Cases.</returns>
+        Task<List<Orders>> GetWorkerOrders(int workerId);
+
         Task<OrderContent> GetOrderContentWithFile(int FileId);
 
         /// <summary>Creates order.</summary>
@@ -54,5 +58,7 @@ namespace Arhive_MDM.Data.Repositories
         /// <summary>Removes order and it's content.</summary>
         /// <param name="orderContent">Order content to remove.</param>
         Task RemoveOrderContent(List<OrderContent> orderContent);
+
+        
     }
 }

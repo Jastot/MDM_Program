@@ -17,6 +17,6 @@ namespace Arhive_MDM.Models
 
         [Required] public float Salary { get; set; }
 
-        public ICollection<Case> Cases { get; set; }
+        public ICollection<Orders> Orders { get; set; }
     }
 }

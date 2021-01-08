@@ -1,6 +1,7 @@
 ﻿using Arhive_MDM.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Arhive_MDM.Data.Repositories
@@ -27,6 +28,10 @@ namespace Arhive_MDM.Data.Repositories
 
         public Task<List<Documents>> GetDocuments()=>
             _context.Documents.ToListAsync();
+
+        public Task<List<Documents>> GetDocumentsByOrder(int orderId) =>
+            _context.Documents.Where(x => x.OrderId == orderId).ToListAsync();
+
 
         public Task RemoveDocuments(Documents document)
         {

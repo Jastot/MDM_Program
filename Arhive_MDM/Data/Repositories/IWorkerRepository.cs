@@ -20,6 +20,8 @@ namespace Arhive_MDM.Data.Repositories
         /// <returns>Returns all workers.</returns>
         Task<List<Worker>> GetWorkers();
 
+        Task<List<Worker>> GetWorkersWhoRole(string role);
+
         /// <summary>Creates worker.</summary>
         /// <param name="worker">worker data.</param>
         /// <returns>Returns id of the new worker.</returns>

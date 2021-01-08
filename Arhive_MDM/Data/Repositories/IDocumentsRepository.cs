@@ -15,6 +15,8 @@ namespace Arhive_MDM.Data.Repositories
         /// <returns>Returns all documents.</returns>
         Task<List<Documents>> GetDocuments();
 
+        Task<List<Documents>> GetDocumentsByOrder(int orderId);
+
         /// <summary>Creates document.</summary>
         /// <param name="document">document data.</param>
         /// <returns>Returns id of the new document.</returns>

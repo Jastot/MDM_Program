@@ -13,8 +13,6 @@ namespace Arhive_MDM.Models
 
         [Required] public string Address { get; set; }
 
-        public ICollection<Case> Cases { get; set; }
-
         public ICollection<Orders> Orders { get; set; }
 
     }

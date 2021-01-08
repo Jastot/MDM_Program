@@ -11,7 +11,7 @@ namespace Arhive_MDM
     static class Program
     {
         public static IServiceProvider ServiceProvider { get; set; }
-
+       
         public static Form LoginForm { get; set; }
 
         [STAThread]
@@ -33,13 +33,13 @@ namespace Arhive_MDM
 
         static void ConfigureServices()
         {
+            
             var services = new ServiceCollection();
             services.AddDbContext<DataContext>();
             services.AddScoped<IWorkerRepository, WorkerRepository>();
             services.AddScoped<IDocumentsRepository, DocumentsRepository>();
             services.AddScoped<IClientsRepository, ClientsRepository>();
             services.AddScoped<IOrdersRepository, OrdersRepository>();
-            services.AddScoped<ICaseRepository, CaseRepository>();
             ServiceProvider = services.BuildServiceProvider();
         }
     }

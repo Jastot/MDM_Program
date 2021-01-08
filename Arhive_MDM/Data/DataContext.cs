@@ -10,8 +10,6 @@ namespace Arhive_MDM.Data
 
         public DbSet<Client> Clients { get; set; }
 
-        public DbSet<Case> Cases { get; set; }
-
         public DbSet<Orders> Orders { get; set; }
 
         public DbSet<OrderContent> OrderContents { get; set; }
@@ -25,9 +23,6 @@ namespace Arhive_MDM.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Case>()
-                .HasOne(x => x.Client)
-                .WithMany(x => x.Cases);
 
             modelBuilder.Entity<Client>()
                 .HasMany(x => x.Orders)
@@ -49,10 +44,6 @@ namespace Arhive_MDM.Data
                 .HasIndex(x => x.Login)
                 .IsUnique();
 
-            modelBuilder.Entity<Case>()
-                .HasOne(x => x.Worker)
-                .WithMany(x => x.Cases);
-
             modelBuilder.Entity<Orders>()
                 .HasIndex(x => x.Id)
                 .IsUnique();
@@ -65,17 +56,18 @@ namespace Arhive_MDM.Data
                 .HasMany(x => x.OrderContents)
                 .WithOne(x => x.Orders);
 
-            modelBuilder.Entity<Case>()
-                .HasIndex(x => x.Id)
-                .IsUnique();
+            modelBuilder.Entity<Orders>()
+                .HasOne(x => x.Worker)
+                .WithMany(x => x.Orders);
+
+            modelBuilder.Entity<Orders>()
+                .HasMany(x => x.Documents)
+                .WithOne(x => x.Orders);
 
             modelBuilder.Entity<Documents>()
                .HasIndex(x => x.Id)
                .IsUnique();
 
-            modelBuilder.Entity<Case>()
-                .HasMany(x => x.Documents)
-                .WithOne(x => x.Case);
         }
     }
 }

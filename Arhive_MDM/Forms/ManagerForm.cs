@@ -193,7 +193,7 @@ namespace Arhive_MDM.Forms
             message += fio.Length == 0 
                 ? "Поле \"ФИО Клиента\" не должно быть пустым.\n"
                 : "";
-            message += telephone.Length >= 10 && telephone.Length < 13 
+            message += telephone.Length < 11 && telephone.Length > 13 
                 ? "Поле \"Телефон\" должно быть заполнено в диапазоне от 11 до 13 символов\n" 
                 : "";
             message += address.Length == 0

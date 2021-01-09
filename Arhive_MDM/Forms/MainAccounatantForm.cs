@@ -110,12 +110,29 @@ namespace Arhive_MDM.Forms
                     table.AddCell(new Phrase(currentOrders[i].Id.ToString(), font));
                     table.AddCell(new Phrase("ФИО заказчика", font));
                     table.AddCell(new Phrase(currentuser.FIO, font));
+                    table.AddCell(new Phrase("телефон заказчика", font));
+                    table.AddCell(new Phrase(currentuser.ContactNumber, font));
                     table.AddCell(new Phrase("ФИО исполнителя", font));
                     table.AddCell(new Phrase(currentworker.FIO, font));
+
+                    var col = new PdfPCell(new Phrase(currentOrders[i].Payment.ToString(), font));
+                    var col2 = new PdfPCell(new Phrase(currentOrders[i].PaymentIsDone.ToString(), font));
+                    if(currentOrders[i].Payment > currentOrders[i].PaymentIsDone)
+                    {
+                        col.BackgroundColor = BaseColor.RED;
+                        col2.BackgroundColor = BaseColor.RED;
+                    }
+                    else
+                    {
+                        col.BackgroundColor = BaseColor.WHITE;
+                        col2.BackgroundColor = BaseColor.WHITE;
+                    }
                     table.AddCell(new Phrase("Сумма к оплате", font));
-                    table.AddCell(new Phrase(currentOrders[i].Payment.ToString(), font));
+                    table.AddCell(col);
                     table.AddCell(new Phrase("Оплачено", font));
-                    table.AddCell(new Phrase(currentOrders[i].PaymentIsDone.ToString(), font));
+                    table.AddCell(col2);
+
+
                     table.AddCell(new Phrase("Дата завершения", font));
                     table.AddCell(new Phrase(currentOrders[i].TimeCompleted.ToString(), font));
 
@@ -128,6 +145,7 @@ namespace Arhive_MDM.Forms
             document.TimeCreated = DateTime.Now;
             await _documentsRepository.CreateDocuments(document);
             await UpdateDataGridViewDocuments(dateTimePickerFrom.Value, dateTimePickerTo.Value);
+            await UpdateDataGridViewOrders(dateTimePickerFrom.Value, dateTimePickerTo.Value);
         }
         private bool VerifyDocumentsValues(out string name)
         {

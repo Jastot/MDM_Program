@@ -121,32 +121,35 @@ namespace Arhive_MDM.Forms
                 var selectedRow = selectedOrdersRow[0];
                 if (selectedRow.Cells[0].Value != null)
                 {
-                    OpenFileDialog OPF = new OpenFileDialog();
-                    OPF.Multiselect = false;
-                    if (OPF.ShowDialog() == DialogResult.OK)
+                    if (dataGridViewOrderContent.SelectedRows.Count>0)
                     {
-                        foreach (string file in OPF.FileNames)
+                        OpenFileDialog OPF = new OpenFileDialog();
+                        OPF.Multiselect = false;
+                        if (OPF.ShowDialog() == DialogResult.OK)
                         {
-                            copyLink = file;
+                            foreach (string file in OPF.FileNames)
+                            {
+                                copyLink = file;
+                            }
                         }
-                    }
                     //название и расширение требуемого файла
-                    string FileName = Path.GetFileName(copyLink);
+                        string FileName = Path.GetFileName(copyLink);
                     //Место складирования
+                    
+                        var selectedOrderContentRow = dataGridViewOrderContent.SelectedRows[0];
+                        var ordercontet = await _ordersRepository.GetOrdersContent(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
 
-                    var selectedOrderContentRow = dataGridViewOrderContent.SelectedRows[0];
-                    var ordercontet =await _ordersRepository.GetOrdersContent(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
+                        var folder = localFileManager.CreateFileFolder("OrderContet_" + ordercontet.Id.ToString());
+                        var fileLink = $@"{folder}\{FileName}";
+                        File.Copy(copyLink, fileLink, true);
 
-                    var folder = localFileManager.CreateFileFolder("OrderContet_" + ordercontet.Id.ToString());
-                    var fileLink = $@"{folder}\{FileName}";
-                    File.Copy(copyLink, fileLink, true);
 
-                   
-                    var order = await _ordersRepository.GetOrder(Convert.ToInt32(selectedRow.Cells[0].Value));
-                    order.TimeCompleted = DateTime.Now;
-                    ordercontet.FileLink = fileLink;
-                    await _ordersRepository.UpdateOrderContent(ordercontet);
-                    await UpdateDataGridViewDocuments(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
+                        var order = await _ordersRepository.GetOrder(Convert.ToInt32(selectedRow.Cells[0].Value));
+                        order.TimeCompleted = DateTime.Now;
+                        ordercontet.FileLink = fileLink;
+                        await _ordersRepository.UpdateOrderContent(ordercontet);
+                        await UpdateDataGridViewDocuments(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
+                    }
                 }
             }
             

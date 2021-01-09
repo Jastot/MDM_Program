@@ -22,7 +22,7 @@ namespace Arhive_MDM.Data.Repositories
         /// <param name="guideId">Id of the guide.</param>
         /// <param name="fileName">Name of the file.</param>
         /// <param name="file">File from array of bytes.</param>
-        string CreateFileFolder(int fileId);
+        string CreateFileFolder(string fileName);
 
         /// <summary>Returns file as byte array.</summary>
         /// <param name="guideId">Id of the guide.</param>

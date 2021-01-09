@@ -21,14 +21,14 @@ namespace Arhive_MDM.Forms
 
         private void refreshGridWidth()
         {
-            dataGridViewOrders.Columns[0].Width = 10;
-            dataGridViewOrders.Columns[1].Width = 40;
-            dataGridViewOrders.Columns[2].Width = 40;
+            dataGridViewOrders.Columns[0].Width = 30;
+            dataGridViewOrders.Columns[1].Width = 50;
+            dataGridViewOrders.Columns[2].Width = 50;
             dataGridViewOrders.Columns[3].Width = 80;
             dataGridViewOrders.Columns[4].Width = 80;
 
             dataGridViewDocuments.Columns[0].Width = 10;
-            dataGridViewDocuments.Columns[1].Width = 50;
+            dataGridViewDocuments.Columns[1].Width = 70;
             dataGridViewDocuments.Columns[2].Width = 300;
         }
 
@@ -72,13 +72,12 @@ namespace Arhive_MDM.Forms
             {
                 return;
             }
-
             var document = new Models.Documents()
             {
                 FileName = name
             };
 
-            var folder = localFileManager.CreateFileFolder(document.Id);
+            var folder = localFileManager.CreateFileFolder("Document_" + document.Id.ToString());
             folder = $@"{folder}\{name}" + ".pdf";
             Document doc = new Document();
             PdfWriter.GetInstance(doc, new FileStream(folder, FileMode.Create)) ; 
@@ -95,7 +94,7 @@ namespace Arhive_MDM.Forms
             
             for (int i = 0; i < currentOrders.Count; i++)
             {
-                if (currentOrders[i].TimeCompleted == DateTime.MinValue)
+                if (currentOrders[i].TimeCompleted != DateTime.MinValue)
                 {
                     var currentuser = await _clientsRepository.GetClient(currentOrders[i].ClientId);
                     var currentworker = await _workerRepository.GetWorker(currentOrders[i].WorkerId);
@@ -124,13 +123,11 @@ namespace Arhive_MDM.Forms
                 }
             }
             doc.Close();
-            
-            MessageBox.Show("Pdf-документ сохранен");
 
             document.FileLink = folder;
-            
+            var selectedRow = dataGridViewOrders.SelectedRows[0];
             await _documentsRepository.CreateDocuments(document);
-            await UpdateDataGridViewDocuments();
+            await UpdateDataGridViewDocuments(Convert.ToInt32(selectedRow.Cells[0].Value));
         }
         private bool VerifyDocumentsValues(out string name)
         {
@@ -149,7 +146,19 @@ namespace Arhive_MDM.Forms
         }
         private void dataGridViewCases_SelectionChanged(object sender, EventArgs e)
         {
-          
+            dataGridViewOrders.Columns[0].Width = 40;
+            var selectedOrdersRow = dataGridViewOrders.SelectedRows;
+            var orderSelected = selectedOrdersRow.Count > 0;
+
+
+            if (orderSelected)
+            {
+                var selectedRow = selectedOrdersRow[0];
+                if (selectedRow.Cells[0].Value != null)
+                {
+                    UpdateDataGridViewDocuments(Convert.ToInt32(selectedRow.Cells[0].Value));
+                }
+            }
         }
         private async Task UpdateDataGridViewOrders(DateTime dataFrom, DateTime dataTo)
         {
@@ -171,10 +180,10 @@ namespace Arhive_MDM.Forms
             ClearDataGridViewOrdersSelection();
         }
 
-        private async Task UpdateDataGridViewDocuments()
+        private async Task UpdateDataGridViewDocuments(int orderId)
         {
             refreshGridWidth();
-            var documents = await _documentsRepository.GetDocuments();
+            var documents = await _documentsRepository.GetDocumentsByOrder(orderId);
             dataGridViewDocuments.Rows.Clear();
             dataGridViewDocuments.Columns[1].Width = documents.Count > 4 ? 348 : 365;
             foreach (var document in documents)

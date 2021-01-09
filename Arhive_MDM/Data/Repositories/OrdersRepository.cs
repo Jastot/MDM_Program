@@ -98,6 +98,6 @@ namespace Arhive_MDM.Data.Repositories
             _context.Orders.Where(x => x.WorkerId == workerId).ToListAsync();
 
         public Task<List<Orders>> GetOrdersinDates(DateTime datastart, DateTime dataend) =>
-            _context.Orders.Where(x => x.TimeCreated >= datastart && x.TimeCreated <= dataend).ToListAsync();
+            _context.Orders.Where(x => x.TimeCompleted >= datastart && x.TimeCompleted <= dataend).ToListAsync();
     }
 }

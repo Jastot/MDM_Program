@@ -168,10 +168,10 @@ namespace Arhive_MDM.Forms
             
 
             var message = "";
-            message += summ.Length < 0
+            message += summ.Length == 0
                 ? "Поле \"Сумма\" не должно быть пустым.\n"
                 : "";
-            message += payment.Length <= 0
+            message += payment.Length == 0
                 ? "Поле \"Оплачено\" не должно быть пустым.\n"
                 : "";
             
@@ -190,13 +190,13 @@ namespace Arhive_MDM.Forms
             address = textBoxAddress.Text;
 
             var message = "";
-            message += fio.Length < 0 
+            message += fio.Length == 0 
                 ? "Поле \"ФИО Клиента\" не должно быть пустым.\n"
                 : "";
             message += telephone.Length <= 10 && telephone.Length > 13 
                 ? "Поле \"Телефон\" должно быть заполнено в диапазоне от 11 до 13 символов\n" 
                 : "";
-            message += address.Length < 0
+            message += address.Length == 0
                 ? "Поле \"Адресс\" не должно быть пустым.\n"
                 : "";
             
@@ -415,7 +415,8 @@ namespace Arhive_MDM.Forms
             var ordercontent = new Models.OrderContent()
             {
                 OrdersId = Convert.ToInt32(selectedOrderRow.Cells[0].Value),
-                Info = textBoxInfo.Text
+                Info = textBoxInfo.Text,
+                FileLink = ""
             };
 
             await _ordersRepository.CreateOrderContent(ordercontent);

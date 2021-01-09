@@ -28,9 +28,9 @@ namespace Arhive_MDM.Data.Repositories
 
 
         /// <inheritdoc />
-        public string CreateFileFolder(int FileId)
+        public string CreateFileFolder(string FileId)
         {
-            var Folder = Path.Combine(_storage, FileId.ToString());
+            var Folder = Path.Combine(_storage, FileId);
             Directory.CreateDirectory(Folder);
             return Folder;
         }

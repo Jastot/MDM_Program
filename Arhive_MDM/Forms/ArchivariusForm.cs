@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using System.Collections.Generic;
 
 namespace Arhive_MDM.Forms
 {
@@ -36,11 +37,14 @@ namespace Arhive_MDM.Forms
 
             dataGridViewDocuments.RowHeadersVisible = false;
             dataGridViewDocuments.ColumnCount = 3;
-            dataGridViewDocuments.Columns[0].HeaderText = "Код";
-            dataGridViewDocuments.Columns[1].HeaderText = "Название фаила";
+            dataGridViewDocuments.Columns[0].HeaderText = "КодКонтента";
+            dataGridViewDocuments.Columns[1].HeaderText = "Код";
             dataGridViewDocuments.Columns[2].HeaderText = "Ссылка на фаил";
             dataGridViewDocuments.Columns[0].Visible = false;
+            dataGridViewDocuments.Columns[1].Visible = false;
             dataGridViewDocuments.Columns[1].ReadOnly = true;
+            dataGridViewDocuments.Width = 300;
+
 
             dataGridViewOrderContent.RowHeadersVisible = false;
             dataGridViewOrderContent.ColumnCount = 2;
@@ -72,22 +76,20 @@ namespace Arhive_MDM.Forms
 
         private async void buttonNewPDFCreate_Click(object sender, EventArgs e)
         {
+            dataGridViewDocuments.Width = 300;
             if (!VerifyDocumentsValues(out var name))
             {
                 return;
             }
             var selectedRow = selectedOrdersRow[0];
-            var document = new Models.Documents()
-            {
-                OrderId = Convert.ToInt32(selectedRow.Cells[0].Value),
-                FileName = name
-            };
+            var selectedOrderContentRow = dataGridViewOrderContent.SelectedRows[0];
+            var ordercontet = await _ordersRepository.GetOrdersContent(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
 
-            var folder = localFileManager.CreateFileFolder(document.Id);
+            var folder = localFileManager.CreateFileFolder("OrderContet_" + ordercontet.Id.ToString());
             folder = $@"{folder}\{name}" + ".pdf";
-            Rectangle pagesize = new Rectangle(600f, 300f);
+            
             Document doc = new Document();
-            PdfWriter wr_pdf = PdfWriter.GetInstance(doc, new FileStream(folder, FileMode.Create));
+            PdfWriter.GetInstance(doc, new FileStream(folder, FileMode.Create));
             doc.Open();
 
             string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
@@ -99,16 +101,20 @@ namespace Arhive_MDM.Forms
             doc.Close();
 
             MessageBox.Show("Pdf-документ сохранен");
+           
+            var order = await _ordersRepository.GetOrder(Convert.ToInt32(selectedRow.Cells[0].Value));
+            order.TimeCompleted = DateTime.Now;
+            ordercontet.FileLink = folder;
 
-            document.FileLink = folder;
-
-            await _documentsRepository.CreateDocuments(document);
-            await UpdateDataGridViewDocuments(Convert.ToInt32(selectedRow.Cells[0].Value));
+            await _ordersRepository.UpdateOrderContent(ordercontet);
+            await UpdateDataGridViewDocuments(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
         }
 
         private async void buttonRestore_Click(object sender, EventArgs e)
         {
+            dataGridViewDocuments.Width = 300;
             selectedOrdersRow = dataGridViewOrders.SelectedRows;
+            
             var orderSelected = selectedOrdersRow.Count > 0;
             if (orderSelected)
             {
@@ -127,20 +133,20 @@ namespace Arhive_MDM.Forms
                     //название и расширение требуемого файла
                     string FileName = Path.GetFileName(copyLink);
                     //Место складирования
-                    var document = new Models.Documents()
-                    {
-                        OrderId = Convert.ToInt32(selectedRow.Cells[0].Value),
-                        FileName = FileName
-                    };
 
-                    var folder = localFileManager.CreateFileFolder(document.Id);
+                    var selectedOrderContentRow = dataGridViewOrderContent.SelectedRows[0];
+                    var ordercontet =await _ordersRepository.GetOrdersContent(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
+
+                    var folder = localFileManager.CreateFileFolder("OrderContet_" + ordercontet.Id.ToString());
                     var fileLink = $@"{folder}\{FileName}";
                     File.Copy(copyLink, fileLink, true);
 
-                    document.FileLink = fileLink;
-                    await _documentsRepository.CreateDocuments(document);
-                    await UpdateDataGridViewDocuments(Convert.ToInt32(selectedRow.Cells[0].Value));
-                
+                   
+                    var order = await _ordersRepository.GetOrder(Convert.ToInt32(selectedRow.Cells[0].Value));
+                    order.TimeCompleted = DateTime.Now;
+                    ordercontet.FileLink = fileLink;
+                    await _ordersRepository.UpdateOrderContent(ordercontet);
+                    await UpdateDataGridViewDocuments(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
                 }
             }
             
@@ -152,11 +158,18 @@ namespace Arhive_MDM.Forms
             dataGridViewOrderContent.CurrentCell = null;
 
         }
+        private void ClearDataGridViewOrderDocSelection()
+        {
+            dataGridViewDocuments.ClearSelection();
+            dataGridViewDocuments.CurrentCell = null;
+        }
         private void dataGridViewOrders_SelectionChanged(object sender, EventArgs e)
         {
+            dataGridViewDocuments.Width = 300;
             dataGridViewOrders.Columns[0].Width = 40;
             dataGridViewOrderContent.Columns[0].Width = 40;
             ClearDataGridViewOrderContentSelection();
+            ClearDataGridViewOrderDocSelection();
             selectedOrdersRow = dataGridViewOrders.SelectedRows;
 
             var orderSelected = selectedOrdersRow.Count > 0;
@@ -174,7 +187,7 @@ namespace Arhive_MDM.Forms
 
         private void dataGridViewOrderContent_SelectionChanged(object sender, EventArgs e)
         {
-           
+            dataGridViewDocuments.Width = 300;
             dataGridViewOrders.Columns[0].Width = 40;
             dataGridViewOrderContent.Columns[0].Width = 40;
             selectedOrdersRow = dataGridViewOrders.SelectedRows;
@@ -191,9 +204,8 @@ namespace Arhive_MDM.Forms
                         var selectedOrder = selectedOrdersRow[0];
                         if (selectedRow.Cells[0].Value != null)
                         {
-                            //textBoxOrderContentId.Text = selectedRow.Cells[0].Value.ToString();
                             textBoxInfo.Text = selectedRow.Cells[1].Value.ToString();
-                            UpdateDataGridViewDocuments(Convert.ToInt32(selectedOrder.Cells[0].Value));
+                            UpdateDataGridViewDocuments(Convert.ToInt32(selectedRow.Cells[0].Value));
                         }
                     }
                 }
@@ -233,18 +245,15 @@ namespace Arhive_MDM.Forms
             ClearDataGridViewOrderContentSelection();
         }
 
-        private async Task UpdateDataGridViewDocuments(int orderId)
-        {
-            var documents = await _documentsRepository.GetDocumentsByOrder(orderId);
+        private async Task UpdateDataGridViewDocuments(int ordercontentId)
+        { 
+            var ordercontent = await _ordersRepository.GetOrdersContent(ordercontentId);
             dataGridViewDocuments.Rows.Clear();
-            dataGridViewDocuments.Columns[1].Width = documents.Count > 4 ? 348 : 365;
-            foreach (var document in documents)
-            {
                 dataGridViewDocuments.Rows.Add(new[] {
-                    document.Id.ToString(),
-                    document.FileName.ToString(),
-                    document.FileLink.ToString() });
-            }
+                    ordercontent.Id.ToString(),
+                    ordercontent.FileId.ToString(),
+                    ordercontent.FileLink.ToString() });
+
             ClearDataGridViewDocumentsSelection();
         }
         private void ClearDataGridViewOrdersSelection()

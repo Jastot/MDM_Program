@@ -174,8 +174,9 @@ namespace Arhive_MDM.Forms
             message += payment.Length == 0
                 ? "Поле \"Оплачено\" не должно быть пустым.\n"
                 : "";
-            if (Convert.ToInt32(summ) < Convert.ToInt32(payment))
-                message += "Число оплаты больше, чем выставленный счет";
+            if(message == "")
+                if (Convert.ToInt32(summ) < Convert.ToInt32(payment) )
+                    message += "Число оплаты больше, чем выставленный счет\n";
 
             if (!message.Equals(""))
             {

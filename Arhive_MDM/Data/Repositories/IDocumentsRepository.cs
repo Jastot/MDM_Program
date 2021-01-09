@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Arhive_MDM.Models;
 
@@ -15,7 +16,7 @@ namespace Arhive_MDM.Data.Repositories
         /// <returns>Returns all documents.</returns>
         Task<List<Documents>> GetDocuments();
 
-        Task<List<Documents>> GetDocumentsByOrder(int orderId);
+        Task<List<Documents>> GetDocumentsByTime(DateTime dataFrom, DateTime dataTo);
 
         /// <summary>Creates document.</summary>
         /// <param name="document">document data.</param>

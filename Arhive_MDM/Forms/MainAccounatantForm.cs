@@ -125,9 +125,9 @@ namespace Arhive_MDM.Forms
             doc.Close();
 
             document.FileLink = folder;
-            var selectedRow = dataGridViewOrders.SelectedRows[0];
+            document.TimeCreated = DateTime.Now;
             await _documentsRepository.CreateDocuments(document);
-            await UpdateDataGridViewDocuments(Convert.ToInt32(selectedRow.Cells[0].Value));
+            await UpdateDataGridViewDocuments(dateTimePickerFrom.Value, dateTimePickerTo.Value);
         }
         private bool VerifyDocumentsValues(out string name)
         {
@@ -156,7 +156,7 @@ namespace Arhive_MDM.Forms
                 var selectedRow = selectedOrdersRow[0];
                 if (selectedRow.Cells[0].Value != null)
                 {
-                    UpdateDataGridViewDocuments(Convert.ToInt32(selectedRow.Cells[0].Value));
+                    UpdateDataGridViewDocuments(dateTimePickerFrom.Value, dateTimePickerTo.Value);
                 }
             }
         }
@@ -180,10 +180,10 @@ namespace Arhive_MDM.Forms
             ClearDataGridViewOrdersSelection();
         }
 
-        private async Task UpdateDataGridViewDocuments(int orderId)
+        private async Task UpdateDataGridViewDocuments(DateTime dataFrom, DateTime dataTo)
         {
             refreshGridWidth();
-            var documents = await _documentsRepository.GetDocumentsByOrder(orderId);
+            var documents = await _documentsRepository.GetDocumentsByTime(dataFrom, dataTo);
             dataGridViewDocuments.Rows.Clear();
             dataGridViewDocuments.Columns[1].Width = documents.Count > 4 ? 348 : 365;
             foreach (var document in documents)
@@ -215,11 +215,13 @@ namespace Arhive_MDM.Forms
         private void dateTimePickerFrom_ValueChanged(object sender, EventArgs e)
         {
             UpdateDataGridViewOrders(dateTimePickerFrom.Value, dateTimePickerTo.Value);
+            UpdateDataGridViewDocuments(dateTimePickerFrom.Value, dateTimePickerTo.Value);
         }
 
         private void dateTimePickerTo_ValueChanged(object sender, EventArgs e)
         {
             UpdateDataGridViewOrders(dateTimePickerFrom.Value, dateTimePickerTo.Value);
+            UpdateDataGridViewDocuments(dateTimePickerFrom.Value, dateTimePickerTo.Value);
         }
 
         private void dataGridViewDocuments_CellContentClick(object sender, DataGridViewCellEventArgs e)

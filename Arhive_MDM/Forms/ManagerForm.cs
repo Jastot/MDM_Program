@@ -193,7 +193,7 @@ namespace Arhive_MDM.Forms
             message += fio.Length == 0 
                 ? "Поле \"ФИО Клиента\" не должно быть пустым.\n"
                 : "";
-            message += telephone.Length < 11 && telephone.Length > 13 
+            message += telephone.Length < 11 || telephone.Length > 13 
                 ? "Поле \"Телефон\" должно быть заполнено в диапазоне от 11 до 13 символов\n" 
                 : "";
             message += address.Length == 0
@@ -340,17 +340,15 @@ namespace Arhive_MDM.Forms
 
         private async void buttonAddOrder_Click(object sender, System.EventArgs e)
         {
-            if (!VerifyClintsValues(out var fio, out var telephone, out var address, await _clientsRepository.GetClients()))
-            {
-                return;
-            }
             if (!VerifyOrdersValues(out var summ, out var payment))
             {
                 return;
             }
-
+            if (selectedClientsRow[0] == null)
+            {
+                return;
+            }
             var selectedClientRow = selectedClientsRow[0];
-
             var workers = await _workerRepository.GetWorkersWhoRole("archivarius");
             
             foreach (var worker in workers)
@@ -386,7 +384,7 @@ namespace Arhive_MDM.Forms
 
         private async void buttonChangeOrder_Click(object sender, System.EventArgs e)
         {
-            if (!VerifyClintsValues(out var fio, out var telephone, out var address, await _clientsRepository.GetClients()))
+            if (selectedClientsRow[0] == null)
             {
                 return;
             }

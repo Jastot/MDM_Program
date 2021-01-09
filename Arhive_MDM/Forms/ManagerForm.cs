@@ -183,7 +183,7 @@ namespace Arhive_MDM.Forms
             }
             return true;
         }
-        private bool VerifyClintsValues(out string fio, out string telephone, out string address)
+        private bool VerifyClintsValues(out string fio, out string telephone, out string address, List<Models.Client> clients)
         {
             fio = textBoxFIO.Text;
             telephone = textBoxTelephone.Text;
@@ -193,13 +193,17 @@ namespace Arhive_MDM.Forms
             message += fio.Length == 0 
                 ? "Поле \"ФИО Клиента\" не должно быть пустым.\n"
                 : "";
-            message += telephone.Length <= 10 && telephone.Length > 13 
+            message += telephone.Length >= 10 && telephone.Length < 13 
                 ? "Поле \"Телефон\" должно быть заполнено в диапазоне от 11 до 13 символов\n" 
                 : "";
             message += address.Length == 0
                 ? "Поле \"Адресс\" не должно быть пустым.\n"
                 : "";
-            
+            foreach (var client in clients)
+            {
+                if (client.ContactNumber == telephone)
+                    message += "Данный контактый номер уже есть в системе\n";
+            }
             if (!message.Equals(""))
             {
                 MessageBox.Show(message, "Error");
@@ -295,7 +299,8 @@ namespace Arhive_MDM.Forms
 
         private async void buttonAddNewClient_Click(object sender, System.EventArgs e)
         {
-            if (!VerifyClintsValues(out var fio, out var telephone, out var address))
+            
+            if (!VerifyClintsValues(out var fio, out var telephone, out var address, await _clientsRepository.GetClients()))
             {
                 return;
             }
@@ -313,7 +318,7 @@ namespace Arhive_MDM.Forms
 
         private async void buttonChangeClient_Click(object sender, System.EventArgs e)
         {
-            if (!VerifyClintsValues(out var fio, out var telephone, out var address))
+            if (!VerifyClintsValues(out var fio, out var telephone, out var address, await _clientsRepository.GetClients()))
             {
                 return;
             }
@@ -335,7 +340,7 @@ namespace Arhive_MDM.Forms
 
         private async void buttonAddOrder_Click(object sender, System.EventArgs e)
         {
-            if (!VerifyClintsValues(out var fio, out var telephone, out var address))
+            if (!VerifyClintsValues(out var fio, out var telephone, out var address, await _clientsRepository.GetClients()))
             {
                 return;
             }
@@ -381,7 +386,7 @@ namespace Arhive_MDM.Forms
 
         private async void buttonChangeOrder_Click(object sender, System.EventArgs e)
         {
-            if (!VerifyClintsValues(out var fio, out var telephone, out var address))
+            if (!VerifyClintsValues(out var fio, out var telephone, out var address, await _clientsRepository.GetClients()))
             {
                 return;
             }

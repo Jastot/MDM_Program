@@ -23,7 +23,7 @@ namespace Arhive_MDM.Forms
             dataGridViewUsers.Columns[0].HeaderText = "ФИО";
             dataGridViewUsers.Columns[1].HeaderText = "Логин";
             dataGridViewUsers.Columns[2].HeaderText = "Должность";
-            dataGridViewUsers.Columns[3].HeaderText = "Зарплата";
+            dataGridViewUsers.Columns[3].HeaderText = "Оклад";
             UsersGridWidthChange();
             
             

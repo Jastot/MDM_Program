@@ -43,22 +43,35 @@ namespace Arhive_MDM.Forms
             dataGridViewDocuments.Columns[0].Visible = false;
             dataGridViewDocuments.Columns[1].Visible = false;
             dataGridViewDocuments.Columns[1].ReadOnly = true;
-            dataGridViewDocuments.Width = 300;
+
 
 
             dataGridViewOrderContent.RowHeadersVisible = false;
             dataGridViewOrderContent.ColumnCount = 2;
             dataGridViewOrderContent.Columns[0].HeaderText = "Код";
             dataGridViewOrderContent.Columns[1].HeaderText = "Информация";
-
+            ReDrawTable();
             UpdateDataGridViewOrders(userId);
 
+        }
+
+        private void ReDrawTable()
+        {
+            dataGridViewDocuments.Columns[2].Width = 450;
+            dataGridViewOrders.Columns[0].Width = 40;
+            dataGridViewOrders.Columns[1].Width = 70;
+            dataGridViewOrders.Columns[2].Width = 75;
+            dataGridViewOrders.Columns[3].Width = 90;
+            dataGridViewOrders.Columns[4].Width = 90;
+            dataGridViewOrderContent.Columns[0].Width = 60;
+            dataGridViewOrderContent.Columns[1].Width = 300;
         }
 
         private void ArchivariusForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Program.LoginForm.Show();
         }
+
         private bool VerifyDocumentsValues(out string name)
         {
             name = textBoxFileName.Text;
@@ -76,7 +89,7 @@ namespace Arhive_MDM.Forms
 
         private async void buttonNewPDFCreate_Click(object sender, EventArgs e)
         {
-            dataGridViewDocuments.Width = 300;
+            
             if (!VerifyDocumentsValues(out var name))
             {
                 return;
@@ -105,7 +118,7 @@ namespace Arhive_MDM.Forms
             var order = await _ordersRepository.GetOrder(Convert.ToInt32(selectedRow.Cells[0].Value));
             order.TimeCompleted = DateTime.Now;
             ordercontet.FileLink = folder;
-
+            ReDrawTable();
             await _ordersRepository.UpdateOrderContent(ordercontet);
             await UpdateDataGridViewDocuments(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
         }
@@ -152,7 +165,7 @@ namespace Arhive_MDM.Forms
                     }
                 }
             }
-            
+            ReDrawTable();
         }
 
         private void ClearDataGridViewOrderContentSelection()
@@ -168,9 +181,7 @@ namespace Arhive_MDM.Forms
         }
         private void dataGridViewOrders_SelectionChanged(object sender, EventArgs e)
         {
-            dataGridViewDocuments.Width = 300;
-            dataGridViewOrders.Columns[0].Width = 40;
-            dataGridViewOrderContent.Columns[0].Width = 40;
+
             ClearDataGridViewOrderContentSelection();
             ClearDataGridViewOrderDocSelection();
             selectedOrdersRow = dataGridViewOrders.SelectedRows;
@@ -185,7 +196,8 @@ namespace Arhive_MDM.Forms
                 {  
                     UpdateDataGridViewOrderContents(Convert.ToInt32(selectedRow.Cells[0].Value));
                 }
-            }   
+            }
+            ReDrawTable();
         }
 
         private void dataGridViewOrderContent_SelectionChanged(object sender, EventArgs e)
@@ -213,7 +225,7 @@ namespace Arhive_MDM.Forms
                     }
                 }
             }
-            
+            ReDrawTable();
         }
 
         private async Task UpdateDataGridViewOrders(int workerId)

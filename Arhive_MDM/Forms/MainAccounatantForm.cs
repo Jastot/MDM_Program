@@ -21,15 +21,15 @@ namespace Arhive_MDM.Forms
 
         private void refreshGridWidth()
         {
-            dataGridViewOrders.Columns[0].Width = 30;
-            dataGridViewOrders.Columns[1].Width = 50;
-            dataGridViewOrders.Columns[2].Width = 50;
+            dataGridViewOrders.Columns[0].Width = 70;
+            dataGridViewOrders.Columns[1].Width = 70;
+            dataGridViewOrders.Columns[2].Width = 75;
             dataGridViewOrders.Columns[3].Width = 80;
             dataGridViewOrders.Columns[4].Width = 80;
 
             dataGridViewDocuments.Columns[0].Width = 10;
-            dataGridViewDocuments.Columns[1].Width = 70;
-            dataGridViewDocuments.Columns[2].Width = 300;
+            dataGridViewDocuments.Columns[1].Width = 100;
+            dataGridViewDocuments.Columns[2].Width = 630;
         }
 
         public MainAccounatantForm(int userId, FileManager fileManager)
@@ -67,7 +67,7 @@ namespace Arhive_MDM.Forms
 
         private async void addButton_Click(object sender, EventArgs e)
         {
-            refreshGridWidth();
+           
             if (!VerifyDocumentsValues(out var name))
             {
                 return;
@@ -143,6 +143,7 @@ namespace Arhive_MDM.Forms
 
             document.FileLink = folder;
             document.TimeCreated = DateTime.Now;
+            refreshGridWidth();
             await _documentsRepository.CreateDocuments(document);
             await UpdateDataGridViewDocuments(dateTimePickerFrom.Value, dateTimePickerTo.Value);
             await UpdateDataGridViewOrders(dateTimePickerFrom.Value, dateTimePickerTo.Value);
@@ -164,7 +165,7 @@ namespace Arhive_MDM.Forms
         }
         private void dataGridViewCases_SelectionChanged(object sender, EventArgs e)
         {
-            dataGridViewOrders.Columns[0].Width = 40;
+
             var selectedOrdersRow = dataGridViewOrders.SelectedRows;
             var orderSelected = selectedOrdersRow.Count > 0;
 
@@ -177,10 +178,11 @@ namespace Arhive_MDM.Forms
                     UpdateDataGridViewDocuments(dateTimePickerFrom.Value, dateTimePickerTo.Value);
                 }
             }
+            refreshGridWidth();
         }
         private async Task UpdateDataGridViewOrders(DateTime dataFrom, DateTime dataTo)
         {
-            refreshGridWidth();
+            
             var orders = await _ordersRepository.GetOrdersinDates(dataFrom,dataTo);
             dataGridViewOrders.Rows.Clear();
             dataGridViewOrders.Columns[1].Width = orders.Count > 4 ? 348 : 365;
@@ -200,7 +202,7 @@ namespace Arhive_MDM.Forms
 
         private async Task UpdateDataGridViewDocuments(DateTime dataFrom, DateTime dataTo)
         {
-            refreshGridWidth();
+          
             var documents = await _documentsRepository.GetDocumentsByTime(dataFrom, dataTo);
             dataGridViewDocuments.Rows.Clear();
             dataGridViewDocuments.Columns[1].Width = documents.Count > 4 ? 348 : 365;
@@ -216,14 +218,14 @@ namespace Arhive_MDM.Forms
 
         private void ClearDataGridViewOrdersSelection()
         {
-            refreshGridWidth();
+       
             dataGridViewOrders.ClearSelection();
             dataGridViewOrders.CurrentCell = null;
         }
 
         private void ClearDataGridViewDocumentsSelection()
         {
-            refreshGridWidth();
+        
             dataGridViewDocuments.ClearSelection();
             dataGridViewDocuments.CurrentCell = null;
         }
@@ -234,12 +236,14 @@ namespace Arhive_MDM.Forms
         {
             UpdateDataGridViewOrders(dateTimePickerFrom.Value, dateTimePickerTo.Value);
             UpdateDataGridViewDocuments(dateTimePickerFrom.Value, dateTimePickerTo.Value);
+            refreshGridWidth();
         }
 
         private void dateTimePickerTo_ValueChanged(object sender, EventArgs e)
         {
             UpdateDataGridViewOrders(dateTimePickerFrom.Value, dateTimePickerTo.Value);
             UpdateDataGridViewDocuments(dateTimePickerFrom.Value, dateTimePickerTo.Value);
+            refreshGridWidth();
         }
 
         private void dataGridViewDocuments_CellContentClick(object sender, DataGridViewCellEventArgs e)

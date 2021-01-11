@@ -34,6 +34,8 @@ namespace Arhive_MDM.Forms
             this.textBoxLogin = new System.Windows.Forms.TextBox();
             this.buttonAdd = new System.Windows.Forms.Button();
             this.groupBoxUserValues = new System.Windows.Forms.GroupBox();
+            this.textBoxSalary = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.buttonRemove = new System.Windows.Forms.Button();
             this.buttonEdit = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
@@ -43,8 +45,6 @@ namespace Arhive_MDM.Forms
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBoxSalary = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUsers)).BeginInit();
             this.groupBoxUserValues.SuspendLayout();
             this.SuspendLayout();
@@ -111,6 +111,23 @@ namespace Arhive_MDM.Forms
             this.groupBoxUserValues.Size = new System.Drawing.Size(534, 195);
             this.groupBoxUserValues.TabIndex = 4;
             this.groupBoxUserValues.TabStop = false;
+            // 
+            // textBoxSalary
+            // 
+            this.textBoxSalary.Location = new System.Drawing.Point(77, 124);
+            this.textBoxSalary.Name = "textBoxSalary";
+            this.textBoxSalary.Size = new System.Drawing.Size(451, 20);
+            this.textBoxSalary.TabIndex = 12;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(6, 125);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(43, 15);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Оклад";
             // 
             // buttonRemove
             // 
@@ -199,23 +216,6 @@ namespace Arhive_MDM.Forms
             this.label1.Size = new System.Drawing.Size(36, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "ФИО";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(6, 125);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(64, 15);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Зарплата";
-            // 
-            // textBoxSalary
-            // 
-            this.textBoxSalary.Location = new System.Drawing.Point(77, 124);
-            this.textBoxSalary.Name = "textBoxSalary";
-            this.textBoxSalary.Size = new System.Drawing.Size(451, 20);
-            this.textBoxSalary.TabIndex = 12;
             // 
             // AdminForm
             // 

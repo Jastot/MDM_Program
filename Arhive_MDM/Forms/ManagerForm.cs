@@ -38,9 +38,7 @@ namespace Arhive_MDM.Forms
             dataGridViewClients.Columns[3].HeaderText = "Адрес";
             
             
-            dataGridViewClients.Columns[1].Width = 120;
-            dataGridViewClients.Columns[2].Width = 120;
-            dataGridViewClients.Columns[3].Width = 120;
+
 
             dataGridViewOrders.RowHeadersVisible = false;
             dataGridViewOrders.ColumnCount = 5;
@@ -49,19 +47,38 @@ namespace Arhive_MDM.Forms
             dataGridViewOrders.Columns[2].HeaderText = "Оплачено";
             dataGridViewOrders.Columns[3].HeaderText = "Дата создания";
             dataGridViewOrders.Columns[4].HeaderText = "Дата завершения";
-            
+            dataGridViewOrders.Columns[4].Visible = false;
 
             //
             dataGridViewOrderContent.RowHeadersVisible = false;
             dataGridViewOrderContent.ColumnCount = 2;
             dataGridViewOrderContent.Columns[0].HeaderText = "Код";
             dataGridViewOrderContent.Columns[1].HeaderText = "Информация";
-            
+            numericUpDownSumm.Controls[0].Visible=false;
+            numericUpDownPayed.Controls[0].Visible = false;
 
+            NormalizeTables();
             UpdateDataGridViewClients();
             ClearClientsValues();
             ClearOrdersValues();
             ClearOrderContentValues();
+        }
+
+        private void NormalizeTables()
+        {
+            dataGridViewClients.Columns[0].Width = 70;
+            dataGridViewClients.Columns[1].Width = 186;
+            dataGridViewClients.Columns[2].Width = 120;
+            dataGridViewClients.Columns[3].Width = 186;
+
+            dataGridViewOrders.Columns[0].Width = 65;
+            dataGridViewOrders.Columns[1].Width = 150;
+            dataGridViewOrders.Columns[2].Width = 150;
+            dataGridViewOrders.Columns[3].Width = 150;
+
+            dataGridViewOrderContent.Columns[0].Width = 65;
+            dataGridViewOrderContent.Columns[1].Width = 270;
+
         }
 
         private void ManagerForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -71,6 +88,7 @@ namespace Arhive_MDM.Forms
 
         private void dataGridViewClients_SelectionChanged(object sender, System.EventArgs e)
         {
+            
             dataGridViewClients.Columns[0].Width = 40;
             dataGridViewOrders.Columns[0].Width = 40;
             dataGridViewOrderContent.Columns[0].Width = 40;
@@ -92,7 +110,7 @@ namespace Arhive_MDM.Forms
                 {
                 textBoxIdClient.Text = selectedRow.Cells[0].Value.ToString();
                 textBoxFIO.Text = selectedRow.Cells[1].Value.ToString();
-                textBoxTelephone.Text = selectedRow.Cells[2].Value.ToString();
+                maskedTextBoxTelephone.Text =selectedRow.Cells[2].Value.ToString();
                 textBoxAddress.Text = selectedRow.Cells[3].Value.ToString();
                 UpdateDataGridViewOrders(Convert.ToInt32(textBoxIdClient.Text));
                     if(orderSelected)
@@ -104,11 +122,12 @@ namespace Arhive_MDM.Forms
                 
             }
 
-            
+            NormalizeTables();
         }
 
         private void dataGridViewOrders_SelectionChanged(object sender, System.EventArgs e)
         {
+            
             dataGridViewClients.Columns[0].Width = 40;
             dataGridViewOrders.Columns[0].Width = 40;
             dataGridViewOrderContent.Columns[0].Width = 40;
@@ -126,19 +145,20 @@ namespace Arhive_MDM.Forms
                     if (selectedRow.Cells[0].Value != null)
                     {
                         textBoxOrderId.Text = selectedRow.Cells[0].Value.ToString();
-                        textBoxOrderSumm.Text = selectedRow.Cells[1].Value.ToString();
-                        textBoxOrderPayment.Text = selectedRow.Cells[2].Value.ToString();
+                        numericUpDownSumm.Value = Convert.ToDecimal(selectedRow.Cells[1].Value);
+                        numericUpDownPayed.Value = Convert.ToDecimal(selectedRow.Cells[2].Value);
                         UpdateDataGridViewOrderContents(Convert.ToInt32(textBoxOrderId.Text));
                     }
                     
                     
                 }
             }
-            
+            NormalizeTables();
         }
 
         private void dataGridViewOrderContent_SelectionChanged(object sender, EventArgs e)
         {
+            
             dataGridViewClients.Columns[0].Width = 40;
             dataGridViewOrders.Columns[0].Width = 40;
             dataGridViewOrderContent.Columns[0].Width = 40;
@@ -160,11 +180,13 @@ namespace Arhive_MDM.Forms
                     }
                 }
             }
+            NormalizeTables();
         }
+
         private bool VerifyOrdersValues(out string summ,out string payment)
         {
-            summ = textBoxOrderSumm.Text;
-            payment = textBoxOrderPayment.Text;
+            summ = numericUpDownSumm.Value.ToString();
+            payment = numericUpDownPayed.Value.ToString();
             
 
             var message = "";
@@ -185,18 +207,16 @@ namespace Arhive_MDM.Forms
             }
             return true;
         }
+
         private bool VerifyClintsValues(out string fio, out string telephone, out string address, List<Models.Client> clients)
         {
             fio = textBoxFIO.Text;
-            telephone = textBoxTelephone.Text;
+            telephone = maskedTextBoxTelephone.Text;
             address = textBoxAddress.Text;
 
             var message = "";
             message += fio.Length == 0 
                 ? "Поле \"ФИО Клиента\" не должно быть пустым.\n"
-                : "";
-            message += telephone.Length < 11 || telephone.Length > 13 
-                ? "Поле \"Телефон\" должно быть заполнено в диапазоне от 11 до 13 символов\n" 
                 : "";
             message += address.Length == 0
                 ? "Поле \"Адресс\" не должно быть пустым.\n"
@@ -230,6 +250,7 @@ namespace Arhive_MDM.Forms
             }
             ClearDataGridViewClientsSelection();
         }
+
         private async Task UpdateDataGridViewOrders(int clientId)
         {
             var orders = await _ordersRepository.GetClientsOrders(clientId);
@@ -247,6 +268,7 @@ namespace Arhive_MDM.Forms
             }
             ClearDataGridViewOrdersSelection();
         }
+
         private async Task UpdateDataGridViewOrderContents(int orderId)
         {
             var orderscontents = await _ordersRepository.GetListOrdersContent(orderId);
@@ -261,36 +283,41 @@ namespace Arhive_MDM.Forms
             }
             ClearDataGridViewOrderContentSelection();
         }
+
         private void ClearDataGridViewOrderContentSelection()
         {
             dataGridViewOrderContent.ClearSelection();
             dataGridViewOrderContent.CurrentCell = null;
             
         }
+
         private void ClearDataGridViewClientsSelection()
         {
             dataGridViewClients.ClearSelection();
             dataGridViewClients.CurrentCell = null;
             
         }
+
         private void ClearDataGridViewOrdersSelection()
         {
             dataGridViewOrders.ClearSelection();
             dataGridViewOrders.CurrentCell = null;
             
         }
+
         private void ClearClientsValues()
         {
             textBoxIdClient.Text = "";
             textBoxFIO.Text = "";
             textBoxAddress.Text = "";
-            textBoxTelephone.Text = "";
+            maskedTextBoxTelephone.Text = "";
         }
+
         private void ClearOrdersValues()
         {
             textBoxOrderId.Text = "";
-            textBoxOrderSumm.Text = "";
-            textBoxOrderPayment.Text = "";
+            numericUpDownSumm.Value = 0;
+            numericUpDownPayed.Value = 0;
         }
 
         private void ClearOrderContentValues()
@@ -313,7 +340,7 @@ namespace Arhive_MDM.Forms
                 ContactNumber = telephone,
                 Address = address
             };
-
+            NormalizeTables();
             await _clientsRepository.CreateClient(client);
             await UpdateDataGridViewClients();
         }
@@ -329,15 +356,17 @@ namespace Arhive_MDM.Forms
             client.FIO = fio;
             client.ContactNumber = telephone;
             client.Address = address;
-
+            NormalizeTables();
             await _clientsRepository.UpdateClient(client);
             await UpdateDataGridViewClients();
         }
 
         private void buttonCancelClient_Click(object sender, System.EventArgs e)
         {
+
             ClearDataGridViewClientsSelection();
             ClearClientsValues();
+            NormalizeTables();
         }
 
         private async void buttonAddOrder_Click(object sender, System.EventArgs e)
@@ -379,7 +408,7 @@ namespace Arhive_MDM.Forms
                 TimeCreated = DateTime.Now,
                 WorkerId = _chosenWorkerId
             };
-
+            NormalizeTables();
             await _ordersRepository.CreateOrder(order);
             await UpdateDataGridViewOrders(Convert.ToInt32(textBoxIdClient.Text));
         }
@@ -398,7 +427,7 @@ namespace Arhive_MDM.Forms
             var order = await _ordersRepository.GetOrder(Convert.ToInt32(textBoxOrderId.Text));
             order.Payment = Convert.ToInt32(summ);
             order.PaymentIsDone = Convert.ToInt32(payment);
-
+            NormalizeTables();
             await _ordersRepository.UpdateOrder(order);
             await UpdateDataGridViewOrders(Convert.ToInt32(textBoxIdClient.Text));
         }
@@ -407,6 +436,7 @@ namespace Arhive_MDM.Forms
         {
             ClearDataGridViewOrdersSelection();
             ClearOrdersValues();
+            NormalizeTables();
         }
 
         private async void buttonAddContent_Click(object sender, EventArgs e)
@@ -423,7 +453,7 @@ namespace Arhive_MDM.Forms
                 Info = textBoxInfo.Text,
                 FileLink = ""
             };
-
+            NormalizeTables();
             await _ordersRepository.CreateOrderContent(ordercontent);
             await UpdateDataGridViewOrderContents(Convert.ToInt32(textBoxOrderId.Text));
             
@@ -434,6 +464,7 @@ namespace Arhive_MDM.Forms
 
             var ordercontent = await _ordersRepository.GetOrdersContent(Convert.ToInt32(textBoxOrderContentId.Text));
             ordercontent.Info = textBoxInfo.Text;
+            NormalizeTables();
             await _ordersRepository.UpdateOrderContent(ordercontent);
             await UpdateDataGridViewOrderContents(Convert.ToInt32(textBoxOrderId.Text));
         }
@@ -442,6 +473,7 @@ namespace Arhive_MDM.Forms
         {
             ClearDataGridViewOrderContentSelection();
             ClearOrderContentValues();
+            NormalizeTables();
         }
     }
 }

@@ -261,7 +261,7 @@ namespace Arhive_MDM.Forms
 
         private async Task UpdateDataGridViewOrders(int workerId)
         {
-            var orders = await _ordersRepository.GetOrdersWithWorkerAndEndDate(workerId, DateTime.MinValue);
+            var orders = await _ordersRepository.GetOrdersWithWorker(workerId);
             //await _ordersRepository.GetOrdersWithWorker(workerId);
             dataGridViewOrders.Rows.Clear();
             dataGridViewOrders.Columns[0].Width = orders.Count > 4 ? 348 : 365;
@@ -301,6 +301,16 @@ namespace Arhive_MDM.Forms
                     ordercontent.FileId.ToString(),
                     ordercontent.FileLink.ToString() });
 
+            if(ordercontent.FileLink.ToString() != "")
+            {
+                buttonRestore.Enabled = false;
+                buttonNewPDFCreate.Enabled = false;
+            }
+            else
+            {
+                buttonRestore.Enabled = true;
+                buttonNewPDFCreate.Enabled = true;
+            }
             ClearDataGridViewDocumentsSelection();
         }
         private void ClearDataGridViewOrdersSelection()
@@ -318,7 +328,14 @@ namespace Arhive_MDM.Forms
 
         private void dataGridViewDocuments_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            Process.Start(dataGridViewDocuments.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+            try
+            {
+                Process.Start(dataGridViewDocuments.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+            }
+            catch
+            {
+
+            }
         }
     }
 }

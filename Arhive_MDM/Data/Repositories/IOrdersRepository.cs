@@ -21,6 +21,7 @@ namespace Arhive_MDM.Data.Repositories
         /// <returns>Returns all orders.</returns>
         Task<List<Orders>> GetOrders();
         Task<List<Orders>> GetOrdersWithWorker(int workerId);
+        Task<List<Orders>> GetOrdersWithWorkerAndEndDate(int workerId,DateTime endTime);
         Task<List<Orders>> GetOrdersinDates(DateTime datastart, DateTime dataend);
 
         Task<List<Orders>> GetClientsOrders(int clientId);

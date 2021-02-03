@@ -221,6 +221,8 @@ namespace Arhive_MDM.Forms
             message += address.Length == 0
                 ? "Поле \"Адресс\" не должно быть пустым.\n"
                 : "";
+            if (telephone.Substring(4, 3) == "000")
+                message += "Контактый номер не можеть иметь код 000\n";
             foreach (var client in clients)
             {
                 if (client.ContactNumber == telephone)

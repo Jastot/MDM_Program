@@ -6,6 +6,8 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.IO;
 using System.Diagnostics;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Arhive_MDM.Forms
 {
@@ -65,6 +67,33 @@ namespace Arhive_MDM.Forms
             UpdateDataGridViewOrders(dateTimePickerFrom.Value,dateTimePickerTo.Value);
         }
 
+        private string SearchNames(string folder, string nameOfDocument)
+        {
+            DirectoryInfo di = new DirectoryInfo(folder);
+            string[] files = di.GetFiles("*.pdf", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();
+           
+            IEnumerable<string> query = files.OrderBy(file => file.Length);
+            int i = 0;
+
+            foreach (var file in query)
+            {
+                if (file == folder + @"\" + nameOfDocument + ".pdf")
+                {
+                    if (i == 0)
+                    {
+                        nameOfDocument += $"_{i}";
+                    }
+                    else
+                    {
+                        nameOfDocument = nameOfDocument.Replace($"_{i - 1}", $"_{i}");
+                    }
+                    i++;
+                }
+               
+            }
+            return nameOfDocument;
+        }
+
         private async void addButton_Click(object sender, EventArgs e)
         {
            
@@ -72,13 +101,17 @@ namespace Arhive_MDM.Forms
             {
                 return;
             }
+
             var document = new Models.Documents()
             {
                 FileName = name
             };
-
             var folder = localFileManager.CreateFileFolder("Document_" + document.Id.ToString());
-            folder = $@"{folder}\{name}" + ".pdf";
+            var format = ".pdf";
+            var trueName = SearchNames(folder, name);
+            folder = folder + @"\" + trueName + format;
+            //folder = $@"{folder}\{name}" + ".pdf";
+            document.FileName = trueName;
             Document doc = new Document();
             PdfWriter.GetInstance(doc, new FileStream(folder, FileMode.Create)) ; 
             doc.Open();
@@ -248,7 +281,14 @@ namespace Arhive_MDM.Forms
 
         private void dataGridViewDocuments_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            try 
+            { 
             Process.Start(dataGridViewDocuments.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+            }
+            catch
+            {
+
+            }
         }
 
         private void MainAccounatantForm_FormClosed(object sender, FormClosedEventArgs e)

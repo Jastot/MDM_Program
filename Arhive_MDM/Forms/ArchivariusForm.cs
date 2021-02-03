@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Arhive_MDM.Forms
 {
@@ -86,7 +87,32 @@ namespace Arhive_MDM.Forms
             }
             return true;
         }
+        private string SearchNames(string folder, string nameOfDocument)
+        {
+            DirectoryInfo di = new DirectoryInfo(folder);
+            string[] files = di.GetFiles("*.pdf", SearchOption.AllDirectories).Select(f => f.FullName).ToArray();
 
+            IEnumerable<string> query = files.OrderBy(file => file.Length);
+            int i = 0;
+
+            foreach (var file in query)
+            {
+                if (file == folder + @"\" + nameOfDocument + ".pdf")
+                {
+                    if (i == 0)
+                    {
+                        nameOfDocument += $"_{i}";
+                    }
+                    else
+                    {
+                        nameOfDocument = nameOfDocument.Replace($"_{i - 1}", $"_{i}");
+                    }
+                    i++;
+                }
+
+            }
+            return nameOfDocument;
+        }
         private async void buttonNewPDFCreate_Click(object sender, EventArgs e)
         {
             
@@ -99,7 +125,11 @@ namespace Arhive_MDM.Forms
             var ordercontet = await _ordersRepository.GetOrdersContent(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
 
             var folder = localFileManager.CreateFileFolder("OrderContet_" + ordercontet.Id.ToString());
-            folder = $@"{folder}\{name}" + ".pdf";
+            //folder = $@"{folder}\{name}" + ".pdf";
+            var format = ".pdf";
+            var trueName = SearchNames(folder, name);
+            folder = folder + @"\" + trueName + format;
+           
             
             Document doc = new Document();
             PdfWriter.GetInstance(doc, new FileStream(folder, FileMode.Create));
@@ -153,6 +183,7 @@ namespace Arhive_MDM.Forms
                         var ordercontet = await _ordersRepository.GetOrdersContent(Convert.ToInt32(selectedOrderContentRow.Cells[0].Value));
 
                         var folder = localFileManager.CreateFileFolder("OrderContet_" + ordercontet.Id.ToString());
+
                         var fileLink = $@"{folder}\{FileName}";
                         File.Copy(copyLink, fileLink, true);
 
@@ -230,7 +261,8 @@ namespace Arhive_MDM.Forms
 
         private async Task UpdateDataGridViewOrders(int workerId)
         {
-            var orders = await _ordersRepository.GetOrdersWithWorker(workerId);
+            var orders = await _ordersRepository.GetOrdersWithWorkerAndEndDate(workerId, DateTime.MinValue);
+            //await _ordersRepository.GetOrdersWithWorker(workerId);
             dataGridViewOrders.Rows.Clear();
             dataGridViewOrders.Columns[0].Width = orders.Count > 4 ? 348 : 365;
             foreach (var order in orders)

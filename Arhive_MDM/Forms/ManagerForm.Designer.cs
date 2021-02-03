@@ -30,6 +30,7 @@ namespace Arhive_MDM.Forms
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.maskedTextBoxTelephone = new System.Windows.Forms.MaskedTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -60,7 +61,6 @@ namespace Arhive_MDM.Forms
             this.buttonChangeContent = new System.Windows.Forms.Button();
             this.buttonAddContent = new System.Windows.Forms.Button();
             this.dataGridViewOrderContent = new System.Windows.Forms.DataGridView();
-            this.maskedTextBoxTelephone = new System.Windows.Forms.MaskedTextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClients)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -91,6 +91,14 @@ namespace Arhive_MDM.Forms
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Clients";
+            // 
+            // maskedTextBoxTelephone
+            // 
+            this.maskedTextBoxTelephone.Location = new System.Drawing.Point(157, 452);
+            this.maskedTextBoxTelephone.Mask = "+7 (000) 000-0000";
+            this.maskedTextBoxTelephone.Name = "maskedTextBoxTelephone";
+            this.maskedTextBoxTelephone.Size = new System.Drawing.Size(415, 20);
+            this.maskedTextBoxTelephone.TabIndex = 13;
             // 
             // label4
             // 
@@ -314,6 +322,7 @@ namespace Arhive_MDM.Forms
             this.dataGridViewOrders.Location = new System.Drawing.Point(7, 20);
             this.dataGridViewOrders.Name = "dataGridViewOrders";
             this.dataGridViewOrders.ReadOnly = true;
+            this.dataGridViewOrders.RowHeadersWidth = 51;
             this.dataGridViewOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewOrders.Size = new System.Drawing.Size(515, 339);
             this.dataGridViewOrders.TabIndex = 0;
@@ -397,27 +406,21 @@ namespace Arhive_MDM.Forms
             this.dataGridViewOrderContent.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewOrderContent.Location = new System.Drawing.Point(7, 20);
             this.dataGridViewOrderContent.Name = "dataGridViewOrderContent";
+            this.dataGridViewOrderContent.RowHeadersWidth = 51;
             this.dataGridViewOrderContent.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewOrderContent.Size = new System.Drawing.Size(337, 241);
             this.dataGridViewOrderContent.TabIndex = 0;
             this.dataGridViewOrderContent.SelectionChanged += new System.EventHandler(this.dataGridViewOrderContent_SelectionChanged);
             // 
-            // maskedTextBoxTelephone
-            // 
-            this.maskedTextBoxTelephone.Location = new System.Drawing.Point(157, 452);
-            this.maskedTextBoxTelephone.Mask = "+7 (000) 000-0000";
-            this.maskedTextBoxTelephone.Name = "maskedTextBoxTelephone";
-            this.maskedTextBoxTelephone.Size = new System.Drawing.Size(415, 20);
-            this.maskedTextBoxTelephone.TabIndex = 13;
-            // 
             // ManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1484, 586);
+            this.ClientSize = new System.Drawing.Size(1489, 586);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ManagerForm";
             this.Text = "ИС Архив - Менеджер";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ManagerForm_FormClosed);
